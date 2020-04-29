@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Server=localhost;Database=VolunteeringDatabase;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context VolunteeringDatabaseContext -DataAnnotations -UseDatabaseNames -Force

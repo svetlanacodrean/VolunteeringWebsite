@@ -23,6 +23,12 @@
                 @Html.DisplayNameFor(model => model.Project[0].EndDate)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Project[0].Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].Topic)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Project[0].CoinsGiven)
             </th>
             <th></th>
@@ -39,6 +45,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Topic.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CoinsGiven)

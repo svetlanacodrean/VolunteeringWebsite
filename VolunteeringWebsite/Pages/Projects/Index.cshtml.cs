@@ -22,7 +22,12 @@ namespace VolunteeringWebsite
 
         public async Task OnGetAsync(string place)
         {
-            Project = await _context.Project.ToListAsync();
+            Project = await _context.Project
+                .Include(p => p.Topic)
+                .Include(p => p.Location)
+                .ThenInclude(l => l.City)
+                .ThenInclude(c => c.Country)
+                .ToListAsync();
         }
     }
 }
