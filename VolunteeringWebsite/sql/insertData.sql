@@ -281,3 +281,9 @@ insert into Topic values
 ('Education and training'),
 ('Creativity and culture'),
 ('Environment and natural protection')
+
+update Project 
+	set TopicId = 3 where id = 2
+
+update project
+	set LocationId = 3 where id = 2

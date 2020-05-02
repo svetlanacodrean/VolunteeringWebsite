@@ -19,6 +19,8 @@ namespace VolunteeringWebsite
         }
 
         public Project Project { get; set; }
+        public string Activities { get; set; }
+
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,12 +29,20 @@ namespace VolunteeringWebsite
                 return NotFound();
             }
 
-            Project = await _context.Project.FirstOrDefaultAsync(m => m.Id == id);
+            Project = await _context.Project
+                .Include(p => p.Location)
+                .ThenInclude(p => p.City)
+                .ThenInclude(p => p.Country)
+                .Include(p => p.Topic).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Project == null)
             {
                 return NotFound();
             }
+
+            if (Project.Activities != null)
+                Activities = "• " + Project.Activities.Replace("\n", "\n• ");
+
             return Page();
         }
     }

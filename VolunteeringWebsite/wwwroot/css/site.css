@@ -105,3 +105,11 @@ header {
     max-width: none;
 }
 
+textarea {
+    border: none;
+    background-color: transparent;
+}
+
+.width-full {
+    width: 100%;
+}

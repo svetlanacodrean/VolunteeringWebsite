@@ -13,9 +13,11 @@ namespace VolunteeringWebsite.Models
         public string Name { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
+        [Display(Name = "Start date")]
         public DateTime StartDate { get; set; }
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
+        [Display(Name = "End date")]
         public DateTime EndDate { get; set; }
         [StringLength(1000)]
         public string Description { get; set; }
@@ -23,6 +25,7 @@ namespace VolunteeringWebsite.Models
         public string Activities { get; set; }
         public int CoinsGiven { get; set; }
         public int? LocationId { get; set; }
+        [Display(Name = "Topic")]
         public int? TopicId { get; set; }
 
         [ForeignKey(nameof(LocationId))]

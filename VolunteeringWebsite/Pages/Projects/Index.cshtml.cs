@@ -20,7 +20,7 @@ namespace VolunteeringWebsite
 
         public IList<Project> Project { get;set; }
 
-        public async Task OnGetAsync(string place)
+        public async Task OnGetAsync()
         {
             Project = await _context.Project
                 .Include(p => p.Topic)
