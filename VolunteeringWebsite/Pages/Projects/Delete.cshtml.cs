@@ -30,6 +30,8 @@ namespace VolunteeringWebsite
 
             Project = await _context.Project
                 .Include(p => p.Location)
+                .ThenInclude(l => l.City)
+                .ThenInclude(c => c.Country)
                 .Include(p => p.Topic).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Project == null)

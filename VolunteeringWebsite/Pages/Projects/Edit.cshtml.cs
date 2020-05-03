@@ -39,6 +39,10 @@ namespace VolunteeringWebsite
         [BindProperty]
         public Project Project { get; set; }
 
+        [Display(Name = "Remote project")]
+        [BindProperty]
+        public bool IsRemote { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -66,6 +70,8 @@ namespace VolunteeringWebsite
                 CityName = Project.Location.City.Name;
                 CountryId = Project.Location.City.Country.Id;
             }
+            else
+                IsRemote = true;
 
             return Page();
         }
@@ -74,8 +80,15 @@ namespace VolunteeringWebsite
         // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!IsRemote && string.IsNullOrEmpty(CityName))
+            {
+                ModelState.AddModelError("CityName", "The field is required");
+            }
+
             if (!ModelState.IsValid)
             {
+                ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
+                ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Name");
                 return Page();
             }
 
@@ -83,10 +96,32 @@ namespace VolunteeringWebsite
                 .Include(l => l.City)
                 .FirstOrDefaultAsync(m => m.Id == Project.LocationId);
 
-            location.StreetName = StreetName;
-            location.StreetNumber = StreetNumber;
-            location.City.Name = CityName;
-            location.City.CountryId = CountryId;
+            if (location == null)
+            {
+                location = new Location();
+                Project.Location = location;
+            }
+
+            if (!string.IsNullOrEmpty(CityName))
+            {
+                City city = await _context.City.FirstOrDefaultAsync(c => c.Name == CityName && c.CountryId == CountryId);
+                if (city == null)
+                {
+                    city = new City();
+                    city.Name = CityName;
+                    city.CountryId = CountryId;
+                }
+
+                location.StreetName = StreetName;
+                location.StreetNumber = StreetNumber;
+                location.City = city;
+            }
+
+            if (IsRemote)
+            {
+                Project.Location = null;
+                Project.LocationId = null;
+            }
 
             _context.Attach(Project).State = EntityState.Modified;
 

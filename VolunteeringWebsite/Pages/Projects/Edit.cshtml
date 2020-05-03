@@ -31,26 +31,31 @@
                     <span asp-validation-for="Project.EndDate" class="text-danger"></span>
                 </div>
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input is-remote-ck" asp-for="IsRemote" onclick="toggleLocation()"/> @Html.DisplayNameFor(model => model.IsRemote)
+                </label>
+            </div>
             <div class="form-row">
                 <div class="form-group group col-md-6">
                     <label asp-for="CountryId" class="control-label"></label>
-                    <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
+                    <select asp-for="CountryId" class="form-control location-input" asp-items="ViewBag.CountryId"></select>
                 </div>
                 <div class="form-group group col-md-6">
                     <label asp-for="CityName" class="control-label"></label>
-                    <input asp-for="CityName" class="form-control" />
+                    <input asp-for="CityName" class="form-control location-input" />
                     <span asp-validation-for="CityName" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label asp-for="StreetName" class="control-label"></label>
-                    <input asp-for="StreetName" class="form-control" />
+                    <input asp-for="StreetName" class="form-control location-input" />
                     <span asp-validation-for="StreetName" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-6">
                     <label asp-for="StreetNumber" class="control-label"></label>
-                    <input asp-for="StreetNumber" class="form-control" />
+                    <input asp-for="StreetNumber" class="form-control location-input" />
                     <span asp-validation-for="StreetNumber" class="text-danger"></span>
                 </div>
             </div>
@@ -86,5 +91,12 @@
 </div>
 
 @section Scripts {
+    <script type="text/javascript">
+        function toggleLocation() {
+            $('.location-input').prop('disabled', $('.is-remote-ck')[0].checked);
+        }
+
+        toggleLocation($('.is-remote-ck')[0]);
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

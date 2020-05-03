@@ -261,6 +261,18 @@ INSERT INTO Country (Id, Iso, [Name]) VALUES
 (238, 'ZM', 'Zambia'),
 (239, 'ZW', 'Zimbabwe');
 
+insert into topic values
+('Education and training'),
+('Employment and entrepreneurship'),
+('Health and wellbeing'),
+('Creativity and culture'),
+('Physical education and sport'),
+('Environment and natural protection'),
+('Disaster prevention and recovery'),
+('Reception and integration of refugees and migrants'),
+('Social challenges'),
+('Citizenship and democratic participation')
+
 SET IDENTITY_INSERT Country Off
 
 insert into City values
@@ -276,11 +288,6 @@ insert into City values
 ('Zelinski', 10, 3),
 ('Great Street', 7, 4),
 ('Estrada de Corazon', 25, 5)
-
-insert into Topic values
-('Education and training'),
-('Creativity and culture'),
-('Environment and natural protection')
 
 update Project 
 	set TopicId = 3 where id = 2

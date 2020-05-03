@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VolunteeringWebsite.Models
 {
-    public partial class Project
+    public partial class Project : IValidatableObject
     {
         [Key]
         public int Id { get; set; }
@@ -34,5 +34,14 @@ namespace VolunteeringWebsite.Models
         [ForeignKey(nameof(TopicId))]
         [InverseProperty("Project")]
         public virtual Topic Topic { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (StartDate > EndDate)
+                yield return new ValidationResult(
+                    "The start date should be less than end date", 
+                    new string[] { nameof(StartDate), nameof(EndDate) }
+                    );
+        }
     }
 }

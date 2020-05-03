@@ -25,6 +25,15 @@ namespace VolunteeringWebsite.Models
         [InverseProperty("Location")]
         public virtual ICollection<Project> Project { get; set; }
 
-        public string FullName { get { return City.Name + ", " + City.Country.Name; } }
+        public string FullName 
+        { 
+            get 
+            {
+                if (City != null)
+                    return City.Name + ", " + City.Country.Name;
+                else
+                    return string.Empty;
+            } 
+        }
     }
 }

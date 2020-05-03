@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using VolunteeringWebsite.Models;
 
 namespace VolunteeringWebsite
@@ -19,19 +20,30 @@ namespace VolunteeringWebsite
             _context = context;
         }
 
+        [BindProperty]
         [Display(Name = "Country")]
         public int CountryId { get; set; }
+
+        [BindProperty]
         [Display(Name = "City")]
         public string CityName { get; set; }
+
+        [BindProperty]
         [Display(Name = "Street")]
         public string StreetName { get; set; }
+
+        [BindProperty]
         [Display(Name = "Number")]
-        public string StreetNumber { get; set; }
+        public int StreetNumber { get; set; }
+
+        [Display(Name = "Remote project")]
+        [BindProperty]
+        public bool IsRemote { get; set; }
 
         public IActionResult OnGet()
         {
-        ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
-        ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Name");
+            ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
+            ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Name");
             return Page();
         }
 
@@ -42,9 +54,37 @@ namespace VolunteeringWebsite
         // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!IsRemote && string.IsNullOrEmpty(CityName))
+            {
+                ModelState.AddModelError("CityName", "The field is required");
+            }
+
             if (!ModelState.IsValid)
             {
+                ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
+                ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Name");
                 return Page();
+            }
+            if (!IsRemote)
+            {
+                Location location = null;
+                if (!string.IsNullOrEmpty(CityName))
+                {
+                    City city = await _context.City.FirstOrDefaultAsync(c => c.Name == CityName);
+                    if (city == null)
+                    {
+                        city = new City();
+                        city.Name = CityName;
+                        city.CountryId = CountryId;
+                    }
+
+                    location = new Location();
+                    location.StreetName = StreetName;
+                    location.StreetNumber = StreetNumber;
+                    location.City = city;
+                }
+
+                Project.Location = location;
             }
 
             _context.Project.Add(Project);
