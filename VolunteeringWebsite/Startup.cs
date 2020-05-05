@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,9 @@ namespace VolunteeringWebsite
 
             services.AddDbContext<VolunteeringDatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("VolunteeringDatabaseContext")));
+            services.AddDefaultIdentity<IdentityUser>(options =>
+                                                 options.SignIn.RequireConfirmedAccount = false)
+           .AddEntityFrameworkStores<VolunteeringDatabaseContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +54,7 @@ namespace VolunteeringWebsite
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

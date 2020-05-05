@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace VolunteeringWebsite.Models
 {
-    public partial class VolunteeringDatabaseContext : DbContext
+    public partial class VolunteeringDatabaseContext : IdentityDbContext<IdentityUser>
     {
         public VolunteeringDatabaseContext()
         {
@@ -32,6 +34,8 @@ namespace VolunteeringWebsite.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<City>(entity =>
             {
                 entity.Property(e => e.Name).IsUnicode(false);
