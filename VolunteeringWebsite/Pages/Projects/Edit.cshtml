@@ -5,9 +5,8 @@
     ViewData["Title"] = "Edit";
 }
 
+<div class="padding-different">
 <h1>Edit</h1>
-
-<h4>Project</h4>
 <hr />
 <div class="row width-full">
     <div class="col-md-5">
@@ -33,7 +32,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input is-remote-ck" asp-for="IsRemote" onclick="toggleLocation()"/> @Html.DisplayNameFor(model => model.IsRemote)
+                    <input class="form-check-input is-remote-ck" asp-for="IsRemote" onclick="toggleLocation()" /> @Html.DisplayNameFor(model => model.IsRemote)
                 </label>
             </div>
             <div class="form-row">
@@ -81,13 +80,14 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-            <input asp-for="Project.LocationId" class="form-control" style="visibility:hidden; width:0; height:0"/>
+            <input asp-for="Project.LocationId" class="form-control" style="visibility:hidden; width:0; height:0" />
         </form>
     </div>
 </div>
 
 <div>
     <a asp-page="./Index">Back to List</a>
+</div>
 </div>
 
 @section Scripts {

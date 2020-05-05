@@ -5,62 +5,83 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Projects</h1>
+    @if (Model.Color == 0)
+    {
+        <h1 class="p-3 mb-2 bg-danger text-white">Projects from home</h1>
+    }
+    else if (Model.Color == 1)
+    {
+        <h1 class="p-3 mb-2 bg-warning text-dark">Projects in Romania</h1>
+    }
+    else
+    {
+        <h1 class="p-3 mb-2 bg-info text-white">Projects abroad</h1>
+    }
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].Topic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].CoinsGiven)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Project) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Topic.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CoinsGiven)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="padding-7">
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Project[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Project[0].StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Project[0].EndDate)
+                </th>
+                @if (!Model.HideLocation)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.Project[0].Location)
+                    </th>
+                }
+                <th>
+                    @Html.DisplayNameFor(model => model.Project[0].Topic)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Project[0].CoinsGiven)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Project)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    @if (!Model.HideLocation)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Location.FullName)
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Topic.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoinsGiven)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
