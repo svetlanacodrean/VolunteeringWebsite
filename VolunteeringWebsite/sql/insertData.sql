@@ -289,8 +289,61 @@ insert into City values
 ('Great Street', 7, 4),
 ('Estrada de Corazon', 25, 5)
 
-update Project 
-	set TopicId = 3 where id = 2
+insert into [Language] ([name])
+	select alias from sys.syslanguages
 
-update project
-	set LocationId = 3 where id = 2
+insert into [Level] values
+(1, 'Beginner'),
+(2, 'Intermediate'),
+(3, 'Advanced'),
+(4, 'Expert')
+
+
+insert into Skill values
+('Adaptability'),
+('Agile development'),
+('Algorithms'),
+('Analytical thinking'),
+('Blogging'),
+('Coaching'),
+('Collaboration'),
+('Communication'),
+('Community Development'),
+('Computer'),
+('Consulting'),
+('Creativity'),
+('Critical Thinking'),
+('Detail oriented'),
+('Driver''s licence'),
+('Ecology'),
+('Empowerment of others'),
+('Engineering'),
+('Facilitation'),
+('Filming'),
+('First Aid'),
+('Graphics and Design'),
+('Human Resources'),
+('Image editing'),
+('Language Teaching'),
+('Leadership'),
+('Negotiation'),
+('Personal skills and knowledge'),
+('Presentation skills'),
+('Problem Solving'),
+('Professional Skills'),
+('Programming skills'),
+('Recruiting'),
+('Research'),
+('Sales'),
+('Self-Confidence'),
+('Solution Orientation'),
+('Strategic Planning'),
+('Team Management'),
+('Technical Support'),
+('Time Management'),
+('Training'),
+('Web Content'),
+('Work Ethic'),
+('World citizenship'),
+('Writing')
+

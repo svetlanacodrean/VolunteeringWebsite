@@ -45,3 +45,40 @@ alter table Project
 
 alter table Project
 	add constraint fk_project_topic foreign key (TopicId) references Topic(Id)
+
+create table [Language]
+(
+	Id int primary key identity,
+	[Name] varchar(30)
+)
+
+create table Project_Language
+(
+	ProjectId int,
+	LanguageId int,
+	constraint project_fk foreign key(ProjectId) references Project(Id),
+	constraint language_fk foreign key(LanguageId) references [Language](Id)
+)
+
+create table [Level]
+(
+	Id int primary key,
+	[Name] varchar(20)
+)
+
+create table Skill
+(
+	Id int primary key identity,
+	[Name] varchar(50),
+	LevelId int,
+	constraint fk_level foreign key (LevelId) references [Level](Id)
+)
+
+create table Project_Skill
+(
+	ProjectId int,
+	SkillId int,
+	constraint projectt_fk foreign key(ProjectId) references Project(Id),
+	constraint skill_fk foreign key(SkillId) references Skill(Id)
+)
+
