@@ -23,8 +23,11 @@ namespace VolunteeringWebsite
         public bool HideLocation { get; set; }
         public int Color { get; set; }
 
+        public string Place { get; set; }
+
         public async Task OnGetAsync(string place)
         {
+            Place = place;
             IQueryable<Project> proj = _context.Project;
 
             if (place == "home")

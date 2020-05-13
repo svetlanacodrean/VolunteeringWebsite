@@ -40,8 +40,13 @@ namespace VolunteeringWebsite
         [BindProperty]
         public bool IsRemote { get; set; }
 
-        public IActionResult OnGet()
+        [BindProperty]
+        public string Place { get; set; }
+
+        public IActionResult OnGet(string place)
         {
+            Place = place;
+
             ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
             ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Name");
             return Page();
@@ -90,7 +95,7 @@ namespace VolunteeringWebsite
             _context.Project.Add(Project);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { place = Place });
         }
     }
 }

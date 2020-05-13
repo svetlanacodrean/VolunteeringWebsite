@@ -21,8 +21,13 @@ namespace VolunteeringWebsite
         [BindProperty]
         public Project Project { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public string Place { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? id, string place)
         {
+            Place = place;
+
             if (id == null)
             {
                 return NotFound();
@@ -56,7 +61,7 @@ namespace VolunteeringWebsite
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { place = Place });
         }
     }
 }

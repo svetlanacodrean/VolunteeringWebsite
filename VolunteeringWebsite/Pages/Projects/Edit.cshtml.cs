@@ -50,8 +50,14 @@ namespace VolunteeringWebsite
         [BindProperty]
         public string LanguageList { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public string Place { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? id, string place)
         {
+
+            Place = place;
+
             if (id == null)
             {
                 return NotFound();
@@ -173,7 +179,7 @@ namespace VolunteeringWebsite
                 }
             }
 
-            return RedirectToPage("./Index", new { place = "home" });
+            return RedirectToPage("./Index", new { place = Place });
         }
 
         private bool ProjectExists(int id)

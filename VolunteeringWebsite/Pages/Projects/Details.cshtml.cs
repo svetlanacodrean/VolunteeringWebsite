@@ -21,9 +21,12 @@ namespace VolunteeringWebsite
         public Project Project { get; set; }
         public string Activities { get; set; }
 
+        public string Place { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, string place)
         {
+            Place = place;
+
             if (id == null)
             {
                 return NotFound();
