@@ -23,6 +23,8 @@ namespace VolunteeringWebsite
 
         public string Place { get; set; }
 
+        public string ProjectLanguage { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id, string place)
         {
             Place = place;
@@ -45,6 +47,10 @@ namespace VolunteeringWebsite
 
             if (Project.Activities != null)
                 Activities = "• " + Project.Activities.Replace("\n", "\n• ");
+
+            var projectLanguage = await _context.Project_Language.Where(l => l.ProjectId == Project.Id).Include(pl => pl.Language).ToListAsync();
+            ProjectLanguage = string.Join(", ", projectLanguage.Select(pl => pl.Language.Name));
+
 
             return Page();
         }
