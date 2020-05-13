@@ -41,11 +41,22 @@ namespace VolunteeringWebsite
         public bool IsRemote { get; set; }
 
         [BindProperty]
+        public string ProjectLanguageList { get; set; }
+
+        [BindProperty]
+        public string LanguageList { get; set; }
+
+        [BindProperty]
         public string Place { get; set; }
 
         public IActionResult OnGet(string place)
         {
             Place = place;
+
+            var languages = _context.Language.ToList();
+            LanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(languages);
+
+            ProjectLanguageList = "[]";
 
             ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
             ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Name");
@@ -90,6 +101,19 @@ namespace VolunteeringWebsite
                 }
 
                 Project.Location = location;
+            }
+
+            var projectLanguagePage = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Project_Language>>(ProjectLanguageList);
+            foreach (var pl in projectLanguagePage)
+            {
+                pl.LanguageId = pl.Language.Id;
+                pl.ProjectId = Project.Id;
+                pl.Language = null;
+            }
+            foreach (var pl in projectLanguagePage)
+            {
+                pl.Project = Project;
+                _context.Project_Language.Add(pl);
             }
 
             _context.Project.Add(Project);

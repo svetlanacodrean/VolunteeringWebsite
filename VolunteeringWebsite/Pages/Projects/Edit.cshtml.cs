@@ -90,6 +90,10 @@ namespace VolunteeringWebsite
             LanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(languages);
 
             var projectLanguage = _context.Project_Language.Where(l => l.ProjectId == Project.Id).Include(pl => pl.Language);
+            foreach (var pl in projectLanguage)
+            {
+                pl.Project = null;
+            }
             ProjectLanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(projectLanguage);
 
             return Page();
