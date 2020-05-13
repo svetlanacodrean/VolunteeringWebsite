@@ -43,6 +43,13 @@ namespace VolunteeringWebsite
         [BindProperty]
         public bool IsRemote { get; set; }
 
+
+        [BindProperty]
+        public string ProjectLanguageList { get; set; }
+
+        [BindProperty]
+        public string LanguageList { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -72,6 +79,12 @@ namespace VolunteeringWebsite
             }
             else
                 IsRemote = true;
+
+            var languages = await _context.Language.ToListAsync();
+            LanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(languages);
+
+            var projectLanguage = _context.Project_Language.Where(l => l.ProjectId == Project.Id).Include(pl => pl.Language);
+            ProjectLanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(projectLanguage);
 
             return Page();
         }
@@ -121,6 +134,24 @@ namespace VolunteeringWebsite
             {
                 Project.Location = null;
                 Project.LocationId = null;
+            }
+
+            var projectLanguageDB = await _context.Project_Language.Where(l => l.ProjectId == Project.Id).ToListAsync();
+            var projectLanguagePage = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Project_Language>>(ProjectLanguageList);
+            foreach (var pl in projectLanguagePage)
+            {
+                pl.LanguageId = pl.Language.Id;
+                pl.ProjectId = Project.Id;
+            }
+            foreach (var pl in projectLanguageDB)
+            {
+                if (projectLanguagePage.Where(l => l.LanguageId == pl.LanguageId).Count() == 0)
+                    _context.Project_Language.Remove(pl);
+            }
+            foreach (var pl in projectLanguagePage)
+            {
+                if (projectLanguageDB.Where(l => l.LanguageId == pl.LanguageId).Count() == 0)
+                    _context.Project_Language.Add(pl);
             }
 
             _context.Attach(Project).State = EntityState.Modified;

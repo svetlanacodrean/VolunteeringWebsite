@@ -19,8 +19,13 @@ namespace VolunteeringWebsite.Models
 
         public virtual DbSet<City> City { get; set; }
         public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<Language> Language { get; set; }
+        public virtual DbSet<Level> Level { get; set; }
         public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<Project> Project { get; set; }
+        public virtual DbSet<Project_Language> Project_Language { get; set; }
+        public virtual DbSet<Project_Skill> Project_Skill { get; set; }
+        public virtual DbSet<Skill> Skill { get; set; }
         public virtual DbSet<Topic> Topic { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -54,6 +59,18 @@ namespace VolunteeringWebsite.Models
                 entity.Property(e => e.Name).IsUnicode(false);
             });
 
+            modelBuilder.Entity<Language>(entity =>
+            {
+                entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Level>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).IsUnicode(false);
+            });
+
             modelBuilder.Entity<Location>(entity =>
             {
                 entity.Property(e => e.StreetName).IsUnicode(false);
@@ -81,6 +98,41 @@ namespace VolunteeringWebsite.Models
                     .WithMany(p => p.Project)
                     .HasForeignKey(d => d.TopicId)
                     .HasConstraintName("fk_project_topic");
+            });
+
+            modelBuilder.Entity<Project_Language>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.HasOne(d => d.Language)
+                    .WithMany()
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("language_fk");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProjectId)
+                    .HasConstraintName("project_fk");
+            });
+
+            modelBuilder.Entity<Project_Skill>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.HasOne(d => d.Project)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProjectId)
+                    .HasConstraintName("projectt_fk");
+
+                entity.HasOne(d => d.Skill)
+                    .WithMany()
+                    .HasForeignKey(d => d.SkillId)
+                    .HasConstraintName("skill_fk");
+            });
+
+            modelBuilder.Entity<Skill>(entity =>
+            {
+                entity.Property(e => e.Name).IsUnicode(false);
             });
 
             modelBuilder.Entity<Topic>(entity =>

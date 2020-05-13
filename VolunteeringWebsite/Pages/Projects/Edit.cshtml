@@ -72,6 +72,10 @@
                 <textarea asp-for="Project.Activities" class="form-control"></textarea>
                 <span asp-validation-for="Project.Activities" class="text-danger"></span>
             </div>
+            <input asp-for="ProjectLanguageList" class="form-control" />
+            <div class="form-group">
+                <div id="language-grid"></div>
+            </div>
             <div class="form-group">
                 <label asp-for="Project.CoinsGiven" class="control-label"></label>
                 <input asp-for="Project.CoinsGiven" class="form-control" />
@@ -97,6 +101,10 @@
         }
 
         toggleLocation($('.is-remote-ck')[0]);
+
+        $(document).ready(function () {
+            createLanguageList(@Html.Raw(Model.ProjectLanguageList), @Html.Raw(Model.LanguageList));
+        });
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
