@@ -82,3 +82,8 @@ create table Project_Skill
 	constraint skill_fk foreign key(SkillId) references Skill(Id)
 )
 
+alter table project_language
+	add Id int primary key identity
+
+alter table project_skill
+	add Id int primary key identity

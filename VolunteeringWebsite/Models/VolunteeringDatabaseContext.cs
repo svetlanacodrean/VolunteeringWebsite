@@ -102,17 +102,16 @@ namespace VolunteeringWebsite.Models
 
             modelBuilder.Entity<Project_Language>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.HasOne(d => d.Language)
                     .WithMany()
+                    //.WithMany(p => p.Project_Language)
                     .HasForeignKey(d => d.LanguageId)
                     .HasConstraintName("language_fk");
 
-                entity.HasOne(d => d.Project)
-                    .WithMany()
-                    .HasForeignKey(d => d.ProjectId)
-                    .HasConstraintName("project_fk");
+                //entity.HasOne(d => d.Project)
+                //    .WithMany(p => p.Project_Language)
+                //    .HasForeignKey(d => d.ProjectId)
+                //    .HasConstraintName("project_fk");
             });
 
             modelBuilder.Entity<Project_Skill>(entity =>

@@ -142,6 +142,7 @@ namespace VolunteeringWebsite
             {
                 pl.LanguageId = pl.Language.Id;
                 pl.ProjectId = Project.Id;
+                pl.Language = null;
             }
             foreach (var pl in projectLanguageDB)
             {
@@ -172,7 +173,7 @@ namespace VolunteeringWebsite
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { place = "home" });
         }
 
         private bool ProjectExists(int id)

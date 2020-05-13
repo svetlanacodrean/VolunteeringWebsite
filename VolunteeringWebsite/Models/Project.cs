@@ -7,6 +7,11 @@ namespace VolunteeringWebsite.Models
 {
     public partial class Project : IValidatableObject
     {
+        public Project()
+        {
+            Project_Language = new HashSet<Project_Language>();
+        }
+
         [Key]
         public int Id { get; set; }
         [StringLength(255)]
@@ -31,6 +36,7 @@ namespace VolunteeringWebsite.Models
         [ForeignKey(nameof(LocationId))]
         [InverseProperty("Project")]
         public virtual Location Location { get; set; }
+        public virtual ICollection<Project_Language> Project_Language { get; set; }
         [ForeignKey(nameof(TopicId))]
         [InverseProperty("Project")]
         public virtual Topic Topic { get; set; }
@@ -39,7 +45,7 @@ namespace VolunteeringWebsite.Models
         {
             if (StartDate > EndDate)
                 yield return new ValidationResult(
-                    "The start date should be less than end date", 
+                    "The start date should be less than end date",
                     new string[] { nameof(StartDate), nameof(EndDate) }
                     );
         }

@@ -9,10 +9,14 @@ namespace VolunteeringWebsite.Models
     {
         public int? ProjectId { get; set; }
         public int? LanguageId { get; set; }
+        [Key]
+        public int? Id { get; set; }
 
         [ForeignKey(nameof(LanguageId))]
+        //[InverseProperty("Project_Language")]
         public virtual Language Language { get; set; }
-        [ForeignKey(nameof(ProjectId))]
-        public virtual Project Project { get; set; }
+        //[ForeignKey(nameof(ProjectId))]
+        //[InverseProperty("Project_Language")]
+        //public virtual Project Project { get; set; }
     }
 }
