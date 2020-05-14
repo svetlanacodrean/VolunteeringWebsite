@@ -77,6 +77,11 @@
                 <label class="control-label">Languages</label>
                 <div id="language-grid"></div>
             </div>
+            <input asp-for="ProjectSkillList" class="form-control" style="visibility:hidden; width:0; height:0" />
+            <div class="form-group">
+                <label class="control-label">Skills Required</label>
+                <div id="skill-grid"></div>
+            </div>
             <div class="form-group">
                 <label asp-for="Project.CoinsGiven" class="control-label"></label>
                 <input asp-for="Project.CoinsGiven" class="form-control" />
@@ -105,6 +110,7 @@
 
         $(document).ready(function () {
             createLanguageList(@Html.Raw(Model.ProjectLanguageList), @Html.Raw(Model.LanguageList));
+            createSkillList(@Html.Raw(Model.ProjectSkillList), @Html.Raw(Model.SkillList));
         });
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

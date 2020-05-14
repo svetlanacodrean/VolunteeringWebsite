@@ -48,3 +48,54 @@
             });
     }
 }
+
+function createSkillList(listData, dropDownData) {
+    var dataSource = new kendo.data.DataSource({
+        pageSize: 20,
+        data: listData,
+        autoSync: true,
+        schema: {
+            model: {
+                fields: {
+                    Skill: { defaultValue: { "Id": null, "Name": "select a skill" } }
+                }
+            }
+        },
+        change: function (e) {
+            var dd = dataSource.data().map(function (x) {
+                return {
+                    "Skill": {
+                        "Id": x.Skill.Id,
+                        "Name": x.Skill.Name
+                    }
+                };
+            });
+
+            $("#ProjectSkillList").val(JSON.stringify(dd));
+        }
+    });
+
+    $("#skill-grid").kendoGrid({
+        dataSource: dataSource,
+        toolbar: [{ name: "create", text: "Add" }],
+        columns: [
+            { field: "Skill", title: "Skill", width: "180px", editor: categoryDropDownEditor, template: "#=Skill.Name#" },
+            { command: { name: "destroy", text: "", width: "10px" }, title: " ", width: "20px" }],
+        editable: {
+            confirmation: false
+        }
+    });
+
+    function categoryDropDownEditor(container, options) {
+        $('<input required name="' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                autoBind: false,
+                dataTextField: "Name",
+                dataValueField: "Id",
+                dataSource: {
+                    data: dropDownData
+                }
+            });
+    }
+}

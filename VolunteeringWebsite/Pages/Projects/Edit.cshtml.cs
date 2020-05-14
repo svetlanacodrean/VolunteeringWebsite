@@ -51,6 +51,12 @@ namespace VolunteeringWebsite
         public string LanguageList { get; set; }
 
         [BindProperty]
+        public string ProjectSkillList { get; set; }
+
+        [BindProperty]
+        public string SkillList { get; set; }
+
+        [BindProperty]
         public string Place { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id, string place)
@@ -95,6 +101,16 @@ namespace VolunteeringWebsite
                 pl.Project = null;
             }
             ProjectLanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(projectLanguage);
+
+            var skills = await _context.Skill.ToListAsync();
+            SkillList = Newtonsoft.Json.JsonConvert.SerializeObject(skills);
+
+            var projectSkill= _context.Project_Skill.Where(l => l.ProjectId == Project.Id).Include(pl => pl.Skill);
+            foreach (var pl in projectSkill)
+            {
+                pl.Project = null;
+            }
+            ProjectSkillList = Newtonsoft.Json.JsonConvert.SerializeObject(projectSkill);
 
             return Page();
         }
@@ -163,6 +179,25 @@ namespace VolunteeringWebsite
             {
                 if (projectLanguageDB.Where(l => l.LanguageId == pl.LanguageId).Count() == 0)
                     _context.Project_Language.Add(pl);
+            }
+
+            var projectSkillDB = await _context.Project_Skill.Where(l => l.ProjectId == Project.Id).ToListAsync();
+            var projectSkillPage = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Project_Skill>>(ProjectSkillList);
+            foreach (var pl in projectSkillPage)
+            {
+                pl.SkillId = pl.Skill.Id;
+                pl.ProjectId = Project.Id;
+                pl.Skill = null;
+            }
+            foreach (var pl in projectSkillDB)
+            {
+                if (projectSkillPage.Where(l => l.SkillId == pl.SkillId).Count() == 0)
+                    _context.Project_Skill.Remove(pl);
+            }
+            foreach (var pl in projectSkillPage)
+            {
+                if (projectSkillDB.Where(l => l.SkillId == pl.SkillId).Count() == 0)
+                    _context.Project_Skill.Add(pl);
             }
 
             _context.Attach(Project).State = EntityState.Modified;

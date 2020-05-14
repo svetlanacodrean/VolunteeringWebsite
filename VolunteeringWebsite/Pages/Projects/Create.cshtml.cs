@@ -44,6 +44,12 @@ namespace VolunteeringWebsite
         public string ProjectLanguageList { get; set; }
 
         [BindProperty]
+        public string SkillList { get; set; }
+
+        [BindProperty]
+        public string ProjectSkillList { get; set; }
+
+        [BindProperty]
         public string LanguageList { get; set; }
 
         [BindProperty]
@@ -57,6 +63,11 @@ namespace VolunteeringWebsite
             LanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(languages);
 
             ProjectLanguageList = "[]";
+
+            var skills = _context.Skill.ToList();
+            SkillList = Newtonsoft.Json.JsonConvert.SerializeObject(skills);
+
+            ProjectSkillList = "[]";
 
             ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
             ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Name");
@@ -114,6 +125,19 @@ namespace VolunteeringWebsite
             {
                 pl.Project = Project;
                 _context.Project_Language.Add(pl);
+            }
+
+            var projectSkillPage = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Project_Skill>>(ProjectSkillList);
+            foreach (var pl in projectSkillPage)
+            {
+                pl.SkillId = pl.Skill.Id;
+                pl.ProjectId = Project.Id;
+                pl.Skill = null;
+            }
+            foreach (var pl in projectSkillPage)
+            {
+                pl.Project = Project;
+                _context.Project_Skill.Add(pl);
             }
 
             _context.Project.Add(Project);

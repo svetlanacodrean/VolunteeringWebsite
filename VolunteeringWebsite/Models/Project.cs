@@ -10,6 +10,7 @@ namespace VolunteeringWebsite.Models
         public Project()
         {
             Project_Language = new HashSet<Project_Language>();
+            Project_Skill = new HashSet<Project_Skill>();
         }
 
         [Key]
@@ -28,6 +29,8 @@ namespace VolunteeringWebsite.Models
         public string Description { get; set; }
         [StringLength(1000)]
         public string Activities { get; set; }
+
+        [Display(Name = "Coins Given")]
         public int CoinsGiven { get; set; }
         public int? LocationId { get; set; }
         [Display(Name = "Topic")]
@@ -36,6 +39,7 @@ namespace VolunteeringWebsite.Models
         [ForeignKey(nameof(LocationId))]
         [InverseProperty("Project")]
         public virtual Location Location { get; set; }
+        public virtual ICollection<Project_Skill> Project_Skill { get; set; }
         public virtual ICollection<Project_Language> Project_Language { get; set; }
         [ForeignKey(nameof(TopicId))]
         [InverseProperty("Project")]

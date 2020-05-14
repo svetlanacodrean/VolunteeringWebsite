@@ -53,7 +53,10 @@ namespace VolunteeringWebsite
                 return NotFound();
             }
 
-            Project = await _context.Project.Include(p => p.Project_Language).FirstOrDefaultAsync(p => p.Id == id);
+            Project = await _context.Project
+                .Include(p => p.Project_Language)
+                .Include(p => p.Project_Skill)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (Project != null)
             {

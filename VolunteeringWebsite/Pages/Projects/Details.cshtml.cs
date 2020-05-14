@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,11 @@ namespace VolunteeringWebsite
 
         public string Place { get; set; }
 
+        [Display(Name = "Languages")]
         public string ProjectLanguage { get; set; }
+
+        [Display(Name = "Skills Required")]
+        public string ProjectSkills { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id, string place)
         {
@@ -51,6 +56,8 @@ namespace VolunteeringWebsite
             var projectLanguage = await _context.Project_Language.Where(l => l.ProjectId == Project.Id).Include(pl => pl.Language).ToListAsync();
             ProjectLanguage = string.Join(", ", projectLanguage.Select(pl => pl.Language.Name));
 
+            var projectSkill = await _context.Project_Skill.Where(l => l.ProjectId == Project.Id).Include(pl => pl.Skill).ToListAsync();
+            ProjectSkills = "• " + string.Join("\n• ", projectSkill.Select(pl => pl.Skill.Name));
 
             return Page();
         }

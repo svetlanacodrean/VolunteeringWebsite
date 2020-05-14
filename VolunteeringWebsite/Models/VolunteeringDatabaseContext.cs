@@ -104,6 +104,12 @@ namespace VolunteeringWebsite.Models
                     .HasForeignKey(pl => pl.ProjectId)
                     .HasConstraintName("project_fk")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(d => d.Project_Skill)
+                    .WithOne(pl => pl.Project)
+                    .HasForeignKey(pl => pl.ProjectId)
+                    .HasConstraintName("projectt_fk")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Project_Language>(entity =>
@@ -123,12 +129,10 @@ namespace VolunteeringWebsite.Models
 
             modelBuilder.Entity<Project_Skill>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.HasOne(d => d.Project)
-                    .WithMany()
-                    .HasForeignKey(d => d.ProjectId)
-                    .HasConstraintName("projectt_fk");
+                //entity.HasOne(d => d.Project)
+                //    .WithMany(p => p.Project_Skill)
+                //    .HasForeignKey(d => d.ProjectId)
+                //    .HasConstraintName("projectt_fk");
 
                 entity.HasOne(d => d.Skill)
                     .WithMany()
