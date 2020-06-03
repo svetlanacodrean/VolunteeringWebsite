@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using VolunteeringWebsite.Areas.Identity.Data;
 
 namespace VolunteeringWebsite.Models
 {
-    public partial class VolunteeringDatabaseContext : IdentityDbContext<IdentityUser>
+    public partial class VolunteeringDatabaseContext : IdentityDbContext<VolunteeringWebsiteUser>
     {
         public VolunteeringDatabaseContext()
         {

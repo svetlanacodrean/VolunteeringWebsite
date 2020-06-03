@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VolunteeringWebsite.Areas.Identity.Data;
 using VolunteeringWebsite.Models;
 
 namespace VolunteeringWebsite
@@ -30,7 +31,7 @@ namespace VolunteeringWebsite
 
             services.AddDbContext<VolunteeringDatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("VolunteeringDatabaseContext")));
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<VolunteeringWebsiteUser>(options =>
                                                  options.SignIn.RequireConfirmedAccount = false)
            .AddEntityFrameworkStores<VolunteeringDatabaseContext>();
         }
