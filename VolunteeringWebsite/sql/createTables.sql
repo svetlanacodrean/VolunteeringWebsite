@@ -87,3 +87,17 @@ alter table project_language
 
 alter table project_skill
 	add Id int primary key identity
+
+create table ProjectStatus
+(
+	Id int primary key identity,
+	[Name] varchar(15)
+)
+
+create table User_Project
+(
+	Id int primary key identity,
+	UserId nvarchar(450) constraint user_fk references AspNetUsers(Id),
+	ProjectId int constraint user_project_fk references Project(Id),
+	StatusId int constraint project_status_fk references ProjectStatus(Id)
+)

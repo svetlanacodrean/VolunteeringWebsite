@@ -347,3 +347,7 @@ insert into Skill values
 ('World citizenship'),
 ('Writing')
 
+insert into ProjectStatus values
+('Favourites'),
+('Applied'),
+('Finished')

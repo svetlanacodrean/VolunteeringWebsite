@@ -1,4 +1,38 @@
-﻿function createLanguageList(listData, dropDownData) {
+﻿function showSnack(message) {
+    var snack = document.createElement('div');
+    snack.classList.add('snackbar');
+    snack.innerHTML = message;
+    document.body.appendChild(snack);
+
+    snack.classList.add("show");
+    setTimeout(function () {
+        snack.className = snack.className.replace("show", "");
+        document.body.removeChild(snack);
+    }, 3000);
+}
+
+function createOkWindow(message) {
+    var popup = document.createElement('div');
+    popup.classList.add('popup-window');
+
+    var p = document.createElement('p');
+    p.innerHTML = message;
+
+    var button = document.createElement('button');
+    button.classList.add('btn');
+    button.classList.add('btn-dark');
+    button.innerHTML = 'OK';
+    button.onclick = function () {
+        document.body.removeChild(popup);
+    };
+
+    popup.appendChild(p);
+    popup.appendChild(button);
+
+    document.body.appendChild(popup);
+}
+
+function createLanguageList(listData, dropDownData) {
     var dataSource = new kendo.data.DataSource({
         pageSize: 20,
         data: listData,
