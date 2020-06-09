@@ -30,7 +30,22 @@ namespace VolunteeringWebsite
         [Display(Name = "Skills Required")]
         public string ProjectSkills { get; set; }
 
+        public async Task<IActionResult> OnPostApplyAsync()
+        {
+            return new JsonResult(new { applied = true });
+        }
+
+        public async Task<IActionResult> OnPostAddToFavouriteAsync()
+        {
+            return new JsonResult(new { added = true });
+        }
+
         public async Task<IActionResult> OnGetAsync(int? id, string place)
+        {
+            return await GetPage(id, place);
+        }
+
+        private async Task<IActionResult> GetPage(int? id, string place)
         {
             Place = place;
 

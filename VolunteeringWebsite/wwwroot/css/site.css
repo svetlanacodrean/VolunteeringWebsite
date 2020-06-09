@@ -308,3 +308,7 @@ a.k-grid-add {
 }
 
 /* popup window */
+
+.dropdown a.nav-link {
+    cursor: pointer;
+}

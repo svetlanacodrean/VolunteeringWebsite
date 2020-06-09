@@ -11,15 +11,15 @@
     var user = await UserManager.GetUserAsync(User);
 }
 
-@if (Model.Color == 0)
+@if (Model.Place == @Const.Place.home)
 {
     <h1 class="p-3 mb-2 bg-danger text-white">Projects from home</h1>
 }
-else if (Model.Color == 1)
+else if (Model.Place == @Const.Place.romania)
 {
     <h1 class="p-3 mb-2 bg-warning text-dark">Projects in Romania</h1>
 }
-else
+else if (Model.Place == @Const.Place.abroad)
 {
     <h1 class="p-3 mb-2 bg-info text-white">Projects abroad</h1>
 }

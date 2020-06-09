@@ -21,7 +21,6 @@ namespace VolunteeringWebsite
 
         public IList<Project> Project { get;set; }
         public bool HideLocation { get; set; }
-        public int Color { get; set; }
 
         public string Place { get; set; }
 
@@ -30,21 +29,48 @@ namespace VolunteeringWebsite
             Place = place;
             IQueryable<Project> proj = _context.Project;
 
-            if (place == "home")
+            switch (place)
             {
-                proj = _context.Project.Where(p => p.LocationId == null);
-                HideLocation = true;
-                Color = 0;
-            }
-            else if (place == "romania")
-            {
-                proj = _context.Project.Where(p => p.Location.City.CountryId == RomaniaId);
-                Color = 1;
-            }
-            else
-            {
-                proj = _context.Project.Where(p => p.LocationId != null && p.Location.City.CountryId != RomaniaId);
-                Color = 2;
+                case Const.Place.home:
+                    {
+                        proj = _context.Project.Where(p => p.LocationId == null);
+                        HideLocation = true;
+                        break;
+                    }
+
+                case Const.Place.romania:
+                    {
+                        proj = _context.Project.Where(p => p.Location.City.CountryId == RomaniaId);
+                        break;
+                    }
+
+                case Const.Place.abroad:
+                    {
+                        proj = _context.Project.Where(p => p.LocationId != null && p.Location.City.CountryId != RomaniaId);
+                        break;
+                    }
+
+                case Const.Place.favourites:
+                    {
+                        proj = _context.Project.Where(p => p.Location.City.CountryId == RomaniaId);
+                        break;
+                    }
+
+                case Const.Place.applied:
+                    {
+                        proj = _context.Project.Where(p => p.Location.City.CountryId == RomaniaId);
+                        break;
+                    }
+
+                case Const.Place.finished:
+                    {
+                        proj = _context.Project.Where(p => p.LocationId != null && p.Location.City.CountryId != RomaniaId);
+                        break;
+                    }
+
+                default:
+                    proj = _context.Project;
+                    break;
             }
 
             Project = await proj

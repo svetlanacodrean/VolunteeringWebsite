@@ -20,81 +20,81 @@
         {
             <div class="text-right">
                 <button class="btn btn-outline-success"
-                        onclick="createOkWindow('Thank you for applying! You will receive an email message as soon as the organisatioin accepts your application.')">
+                        onclick="applyClick()">
                     Apply Now
                 </button>
                 <button class="btn btn-outline-primary"
-                        onclick="showSnack('The project is added to favourites!')">
+                        onclick="addToFavClick()">
                     Add to Favourites
                 </button>
             </div>
         }
-            <dl class="row width-full">
+        <dl class="row width-full">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Project.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Project.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Project.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Project.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Project.EndDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Project.EndDate)
+            </dd>
+            @if (Model.Place != "home")
+            {
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Project.Name)
+                    @Html.DisplayNameFor(model => model.Project.Location)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Project.Name)
+                    @Html.DisplayFor(model => model.Project.Location.FullName)
                 </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Project.StartDate)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Project.StartDate)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Project.EndDate)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Project.EndDate)
-                </dd>
-                @if (Model.Place != "home")
-                {
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Project.Location)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Project.Location.FullName)
-                    </dd>
-                }
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Project.Topic)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Project.Topic.Name)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Project.Description)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.TextAreaFor(model => model.Project.Description, 7, 100, new { @readonly = true })
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Project.Activities)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.TextAreaFor(model => model.Activities, 7, 100, new { @readonly = true })
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.ProjectLanguage)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.ProjectLanguage)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.ProjectSkills)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.TextAreaFor(model => model.ProjectSkills, 5, 100, new { @readonly = true })
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Project.CoinsGiven)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Project.CoinsGiven)
-                </dd>
-            </dl>
-        </div>
+            }
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Project.Topic)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Project.Topic.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Project.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.TextAreaFor(model => model.Project.Description, 7, 100, new { @readonly = true })
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Project.Activities)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.TextAreaFor(model => model.Activities, 7, 100, new { @readonly = true })
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectLanguage)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectLanguage)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectSkills)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.TextAreaFor(model => model.ProjectSkills, 5, 100, new { @readonly = true })
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Project.CoinsGiven)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Project.CoinsGiven)
+            </dd>
+        </dl>
+    </div>
     <div>
         @if (user != null && user.IsAdmin)
         {
@@ -105,3 +105,40 @@
     </div>
 </div>
 
+@section Scripts {
+    <script type="text/javascript">
+        function applyClick() {
+            $.ajax({
+                type: 'POST',
+                url: '/Projects/Details/?handler=Apply',
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                }
+            }).done(function (result) {
+                if (result.applied) {
+                    createOkWindow('Thank you for applying! You will receive an email message as soon as the organisatioin accepts your application.');
+                } else {
+                    createOkWindow('Failed to apply!');
+                }
+            });
+        }
+
+        function addToFavClick() {
+            $.ajax({
+                type: 'POST',
+                url: '/Projects/Details/?handler=AddToFavourite',
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                }
+            }).done(function (result) {
+                if (result.added) {
+                    showSnack('The project is added to favourites!');
+                } else {
+                    showSnack('Failed to add!');
+                }
+            });
+        }
+    </script>
+}
