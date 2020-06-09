@@ -52,19 +52,19 @@ namespace VolunteeringWebsite
 
                 case Const.Place.favourites:
                     {
-                        proj = _context.Project.Where(p => p.Location.City.CountryId == RomaniaId);
+                        proj = GetProjectsByStatus(Const.ProjectStatus.favourites);
                         break;
                     }
 
                 case Const.Place.applied:
                     {
-                        proj = _context.Project.Where(p => p.Location.City.CountryId == RomaniaId);
+                        proj = GetProjectsByStatus(Const.ProjectStatus.applied);
                         break;
                     }
 
                 case Const.Place.finished:
                     {
-                        proj = _context.Project.Where(p => p.LocationId != null && p.Location.City.CountryId != RomaniaId);
+                        proj = GetProjectsByStatus(Const.ProjectStatus.finished);
                         break;
                     }
 
@@ -79,6 +79,17 @@ namespace VolunteeringWebsite
                 .ThenInclude(l => l.City)
                 .ThenInclude(c => c.Country)
                 .ToListAsync();
+        }
+
+        private IQueryable<Project> GetProjectsByStatus(int status)
+        {
+            return _context.Project
+                .Join(_context.User_Project
+                    , p => p.Id
+                    , up => up.ProjectId
+                    , (p, up) => new { project = p, up.Status })
+                .Where(p => p.Status.Id == status)
+                .Select(p => p.project);
         }
     }
 }

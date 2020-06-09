@@ -312,3 +312,8 @@ a.k-grid-add {
 .dropdown a.nav-link {
     cursor: pointer;
 }
+
+.bg-purple {
+    /*background-color: #ba68c8;*/
+    background-color: #8b4b9b;
+}

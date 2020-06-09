@@ -18,6 +18,8 @@ namespace VolunteeringWebsite.Models
         {
         }
 
+        public virtual DbSet<ProjectStatus> ProjectStatus { get; set; }
+        public virtual DbSet<User_Project> User_Project { get; set; }
         public virtual DbSet<City> City { get; set; }
         public virtual DbSet<Country> Country { get; set; }
         public virtual DbSet<Language> Language { get; set; }
@@ -149,6 +151,19 @@ namespace VolunteeringWebsite.Models
             modelBuilder.Entity<Topic>(entity =>
             {
                 entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProjectStatus>(entity =>
+            {
+                entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<User_Project>(entity =>
+            {
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.User_Project)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("project_status_fk");
             });
 
             OnModelCreatingPartial(modelBuilder);

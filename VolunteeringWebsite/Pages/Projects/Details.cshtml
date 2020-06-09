@@ -20,10 +20,12 @@
         {
             <div class="text-right">
                 <button class="btn btn-outline-success"
+                        id="btn-apply"
                         onclick="applyClick()">
                     Apply Now
                 </button>
                 <button class="btn btn-outline-primary"
+                        id="btn-fav"
                         onclick="addToFavClick()">
                     Add to Favourites
                 </button>
@@ -110,7 +112,7 @@
         function applyClick() {
             $.ajax({
                 type: 'POST',
-                url: '/Projects/Details/?handler=Apply',
+                url: '/Projects/Details/?handler=Apply&id=@Model.Project.Id',
                 headers: {
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
@@ -118,6 +120,7 @@
             }).done(function (result) {
                 if (result.applied) {
                     createOkWindow('Thank you for applying! You will receive an email message as soon as the organisatioin accepts your application.');
+                    setApplyButton(false);
                 } else {
                     createOkWindow('Failed to apply!');
                 }
@@ -127,18 +130,50 @@
         function addToFavClick() {
             $.ajax({
                 type: 'POST',
-                url: '/Projects/Details/?handler=AddToFavourite',
+                url: '/Projects/Details/?handler=AddToFavourite&id=@Model.Project.Id',
                 headers: {
                     RequestVerificationToken:
                         $('input:hidden[name="__RequestVerificationToken"]').val()
                 }
             }).done(function (result) {
                 if (result.added) {
+                    setFavButton(true);
                     showSnack('The project is added to favourites!');
+                } else if (result.removed) {
+                    setFavButton(false);
+                    showSnack('The project is removed from favourites!');
                 } else {
-                    showSnack('Failed to add!');
+                    showSnack('Failed to set favourite!');
                 }
             });
         }
+
+        function setApplyButton(enabled) {
+            var b = $('#btn-apply');
+            b.prop('disabled', !enabled);
+
+            if (enabled) {
+                b.html("Apply Now");
+                $('#btn-fav').prop('disabled', false);
+            } else {
+                b.html("Applied");
+                $('#btn-fav').prop('disabled', true);
+                setFavButton(false);
+            }
+        }
+
+        function setFavButton(isFav) {
+            var b = $('#btn-fav');
+
+            if (isFav) {
+                b.html("Favourite");
+            } else {
+                b.html("Add to Favourites");
+            }
+        }
+
+        setFavButton(@(Model.IsFavourite.ToString().ToLower()));
+        setApplyButton(@((!Model.IsApplied).ToString().ToLower()));
+
     </script>
 }

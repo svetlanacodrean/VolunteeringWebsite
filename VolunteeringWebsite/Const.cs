@@ -16,5 +16,12 @@ namespace VolunteeringWebsite
             public const string applied = "applied";
             public const string finished = "finished";
         }
+
+        public class ProjectStatus
+        {
+            public const int favourites = 1;
+            public const int applied = 2;
+            public const int finished = 3;
+        }
     }
 }

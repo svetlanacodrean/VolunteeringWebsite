@@ -7,20 +7,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using VolunteeringWebsite.Models;
+using Microsoft.AspNetCore.Identity;
+using VolunteeringWebsite.Areas.Identity.Data;
 
 namespace VolunteeringWebsite
 {
     public class DetailsModel : PageModel
     {
         private readonly VolunteeringWebsite.Models.VolunteeringDatabaseContext _context;
+        private readonly UserManager<VolunteeringWebsiteUser> _userManager;
 
-        public DetailsModel(VolunteeringWebsite.Models.VolunteeringDatabaseContext context)
+        public DetailsModel(VolunteeringDatabaseContext context, UserManager<VolunteeringWebsiteUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public Project Project { get; set; }
         public string Activities { get; set; }
+
+        public bool IsApplied { get; set; }
+        public bool IsFavourite { get; set; }
 
         public string Place { get; set; }
 
@@ -30,22 +37,80 @@ namespace VolunteeringWebsite
         [Display(Name = "Skills Required")]
         public string ProjectSkills { get; set; }
 
-        public async Task<IActionResult> OnPostApplyAsync()
+        public async Task<IActionResult> OnPostApplyAsync(int? id)
         {
+            if (!id.HasValue)
+                return new JsonResult(new { applied = false });
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var userProject = await _context.User_Project.FirstOrDefaultAsync(up => up.ProjectId == id.Value && up.UserId == user.Id);
+
+            if (userProject != null)
+            {
+                userProject.StatusId = Const.ProjectStatus.applied;
+                _context.Attach(userProject).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return new JsonResult(new { applied = false });
+                }
+            }
+            else
+            {
+                _context.User_Project.Add(new User_Project 
+                {
+                    ProjectId = id.Value,
+                    StatusId = Const.ProjectStatus.applied,
+                    UserId = user.Id
+                });
+                await _context.SaveChangesAsync();
+            }
+
             return new JsonResult(new { applied = true });
         }
 
-        public async Task<IActionResult> OnPostAddToFavouriteAsync()
+        public async Task<IActionResult> OnPostAddToFavouriteAsync(int? id)
         {
-            return new JsonResult(new { added = true });
+            if (!id.HasValue)
+                return new JsonResult(new { applied = false });
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var userProject = await _context.User_Project.FirstOrDefaultAsync(up => up.ProjectId == id.Value && up.UserId == user.Id);
+
+            if (userProject == null)
+            {
+                _context.User_Project.Add(new User_Project
+                {
+                    ProjectId = id.Value,
+                    StatusId = Const.ProjectStatus.favourites,
+                    UserId = user.Id
+                });
+                await _context.SaveChangesAsync();
+                return new JsonResult(new { added = true, removed = false });
+            }
+            else if (userProject.StatusId != Const.ProjectStatus.favourites)
+            {
+                userProject.StatusId = Const.ProjectStatus.favourites;
+                _context.Attach(userProject).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+                return new JsonResult(new { added = true, removed = false });
+            }
+            else
+            {
+                _context.Remove(userProject);
+                await _context.SaveChangesAsync();
+                return new JsonResult(new { added = false, removed = true});
+            }
         }
 
         public async Task<IActionResult> OnGetAsync(int? id, string place)
-        {
-            return await GetPage(id, place);
-        }
-
-        private async Task<IActionResult> GetPage(int? id, string place)
         {
             Place = place;
 
@@ -73,6 +138,12 @@ namespace VolunteeringWebsite
 
             var projectSkill = await _context.Project_Skill.Where(l => l.ProjectId == Project.Id).Include(pl => pl.Skill).ToListAsync();
             ProjectSkills = "• " + string.Join("\n• ", projectSkill.Select(pl => pl.Skill.Name));
+
+            var user = await _userManager.GetUserAsync(User);
+            var userProject = await _context.User_Project.FirstOrDefaultAsync(up => up.ProjectId == id.Value && up.UserId == user.Id);
+
+            IsApplied = userProject != null && userProject.StatusId == Const.ProjectStatus.applied;
+            IsFavourite = userProject != null && userProject.StatusId == Const.ProjectStatus.favourites;
 
             return Page();
         }
