@@ -317,3 +317,14 @@ a.k-grid-add {
     /*background-color: #ba68c8;*/
     background-color: #8b4b9b;
 }
+
+.hover-purple:hover {
+    border-color: #8b4b9b;
+    background-color: white;
+    color: #8b4b9b !important;
+}
+
+#btn-fin {
+    margin-right: 65px;
+}
+

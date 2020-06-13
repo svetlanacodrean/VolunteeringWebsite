@@ -28,6 +28,7 @@ namespace VolunteeringWebsite
 
         public bool IsApplied { get; set; }
         public bool IsFavourite { get; set; }
+        public bool IsFinished { get; set; }
 
         public string Place { get; set; }
 
@@ -36,6 +37,43 @@ namespace VolunteeringWebsite
 
         [Display(Name = "Skills Required")]
         public string ProjectSkills { get; set; }
+
+        public async Task<IActionResult> OnPostFinishAsync(int? id)
+        {
+            if (!id.HasValue)
+                return new JsonResult(new { finished = false });
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var userProject = await _context.User_Project.FirstOrDefaultAsync(up => up.ProjectId == id.Value && up.UserId == user.Id);
+
+            if (userProject != null)
+            {
+                userProject.StatusId = Const.ProjectStatus.finished;
+                _context.Attach(userProject).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return new JsonResult(new { finished = false });
+                }
+            }
+            else
+            {
+                _context.User_Project.Add(new User_Project
+                {
+                    ProjectId = id.Value,
+                    StatusId = Const.ProjectStatus.finished,
+                    UserId = user.Id
+                });
+                await _context.SaveChangesAsync();
+            }
+
+            return new JsonResult(new { finished = true });
+        }
 
         public async Task<IActionResult> OnPostApplyAsync(int? id)
         {
@@ -140,10 +178,15 @@ namespace VolunteeringWebsite
             ProjectSkills = "• " + string.Join("\n• ", projectSkill.Select(pl => pl.Skill.Name));
 
             var user = await _userManager.GetUserAsync(User);
-            var userProject = await _context.User_Project.FirstOrDefaultAsync(up => up.ProjectId == id.Value && up.UserId == user.Id);
 
-            IsApplied = userProject != null && userProject.StatusId == Const.ProjectStatus.applied;
-            IsFavourite = userProject != null && userProject.StatusId == Const.ProjectStatus.favourites;
+            if (user != null)
+            {
+                var userProject = await _context.User_Project.FirstOrDefaultAsync(up => up.ProjectId == id.Value && up.UserId == user.Id);
+
+                IsApplied = userProject != null && userProject.StatusId == Const.ProjectStatus.applied;
+                IsFavourite = userProject != null && userProject.StatusId == Const.ProjectStatus.favourites;
+                IsFinished = userProject != null && userProject.StatusId == Const.ProjectStatus.finished;
+            }
 
             return Page();
         }

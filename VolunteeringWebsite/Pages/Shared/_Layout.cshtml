@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using VolunteeringWebsite.Areas.Identity.Data
+
+@inject SignInManager<VolunteeringWebsiteUser> SignInManager
+@inject UserManager<VolunteeringWebsiteUser> UserManager
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,20 +33,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Projects/Index" asp-route-place=@Const.Place.favourites>Favourites</a>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <a class="nav-link text-dark dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Applications
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" asp-page="/Projects/Index" asp-route-place=@Const.Place.applied>Applied Projects</a>
-                                    <a class="dropdown-item" asp-page="/Projects/Index" asp-route-place=@Const.Place.finished>Finished Projects</a>
+                        @if (SignInManager.IsSignedIn(User) && user != null && !user.IsAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Projects/Index" asp-route-place=@Const.Place.favourites>Favourites</a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a class="nav-link text-dark dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Applications
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" asp-page="/Projects/Index" asp-route-place=@Const.Place.applied>Applied Projects</a>
+                                        <a class="dropdown-item" asp-page="/Projects/Index" asp-route-place=@Const.Place.finished>Finished Projects</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
+                        }
                     </ul>
                 </div>
                 <partial name="_LoginPartial" />

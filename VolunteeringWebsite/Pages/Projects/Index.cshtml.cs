@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using VolunteeringWebsite.Areas.Identity.Data;
 using VolunteeringWebsite.Models;
 
 namespace VolunteeringWebsite
@@ -13,10 +15,12 @@ namespace VolunteeringWebsite
     {
         private const int RomaniaId = 176;
         private readonly VolunteeringWebsite.Models.VolunteeringDatabaseContext _context;
+        private readonly UserManager<VolunteeringWebsiteUser> _userManager;
 
-        public IndexModel(VolunteeringWebsite.Models.VolunteeringDatabaseContext context)
+        public IndexModel(VolunteeringWebsite.Models.VolunteeringDatabaseContext context, UserManager<VolunteeringWebsiteUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IList<Project> Project { get;set; }
@@ -52,19 +56,19 @@ namespace VolunteeringWebsite
 
                 case Const.Place.favourites:
                     {
-                        proj = GetProjectsByStatus(Const.ProjectStatus.favourites);
+                        proj = await GetProjectsByStatusAsync(Const.ProjectStatus.favourites);
                         break;
                     }
 
                 case Const.Place.applied:
                     {
-                        proj = GetProjectsByStatus(Const.ProjectStatus.applied);
+                        proj = await GetProjectsByStatusAsync(Const.ProjectStatus.applied);
                         break;
                     }
 
                 case Const.Place.finished:
                     {
-                        proj = GetProjectsByStatus(Const.ProjectStatus.finished);
+                        proj = await GetProjectsByStatusAsync(Const.ProjectStatus.finished);
                         break;
                     }
 
@@ -81,15 +85,22 @@ namespace VolunteeringWebsite
                 .ToListAsync();
         }
 
-        private IQueryable<Project> GetProjectsByStatus(int status)
+        private async Task<IQueryable<Project>> GetProjectsByStatusAsync(int status)
         {
-            return _context.Project
-                .Join(_context.User_Project
-                    , p => p.Id
-                    , up => up.ProjectId
-                    , (p, up) => new { project = p, up.Status })
-                .Where(p => p.Status.Id == status)
-                .Select(p => p.project);
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user != null)
+            {
+                return _context.Project
+                    .Join(_context.User_Project
+                        , p => p.Id
+                        , up => up.ProjectId
+                        , (p, up) => new { project = p, up.Status, up.UserId })
+                    .Where(p => p.Status.Id == status && p.UserId == user.Id)
+                    .Select(p => p.project);
+            }
+            else
+                return null;
         }
     }
 }

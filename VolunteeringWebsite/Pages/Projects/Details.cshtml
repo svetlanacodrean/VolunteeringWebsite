@@ -19,16 +19,21 @@
         @if (user != null && !user.IsAdmin)
         {
             <div class="text-right">
-                <button class="btn btn-outline-success"
-                        id="btn-apply"
-                        onclick="applyClick()">
-                    Apply Now
-                </button>
-                <button class="btn btn-outline-primary"
-                        id="btn-fav"
-                        onclick="addToFavClick()">
-                    Add to Favourites
-                </button>
+                @if (!Model.IsFinished)
+                {
+                    <button class="btn btn-outline-success"
+                            id="btn-apply"
+                            onclick="applyClick()">
+                        Apply Now
+                    </button>
+                    <button class="btn btn-outline-primary"
+                            id="btn-fav"
+                            onclick="addToFavClick()">
+                        Add to Favourites
+                    </button>
+                }
+                
+
             </div>
         }
         <dl class="row width-full">
@@ -97,6 +102,16 @@
             </dd>
         </dl>
     </div>
+    <div class="text-right">
+        @if (Model.IsApplied)
+        {
+            <button class="btn btn-lg bg-purple text-white hover-purple"
+                    id="btn-fin"
+                    onclick="finClick()">
+                Finish Project
+            </button>
+        }
+    </div>
     <div>
         @if (user != null && user.IsAdmin)
         {
@@ -148,6 +163,35 @@
             });
         }
 
+        function finClick() {
+            $.ajax({
+                type: 'POST',
+                url: '/Projects/Details/?handler=Finish&id=@Model.Project.Id',
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                }
+            }).done(function (result) {
+                if (result.finished) {
+                    setFinButton(false);
+                    createOkWindow('The project is finished!');
+                } else {
+                    showSnack('Failed to finish!');
+                }
+            });
+        }
+
+        function setFinButton(enabled) {
+            var b = $('#btn-fin');
+            b.prop('disabled', !enabled);
+
+            if (enabled) {
+                b.html("Finish");
+            } else {
+                b.html("Finished");
+            }
+        }
+
         function setApplyButton(enabled) {
             var b = $('#btn-apply');
             b.prop('disabled', !enabled);
@@ -172,8 +216,10 @@
             }
         }
 
-        setFavButton(@(Model.IsFavourite.ToString().ToLower()));
-        setApplyButton(@((!Model.IsApplied).ToString().ToLower()));
+        setFavButton(@((Model.IsFavourite || Model.IsFinished).ToString().ToLower()));
+        setApplyButton(@((!Model.IsApplied && !Model.IsFinished).ToString().ToLower()));
+        if (@Model.IsApplied.ToString().ToLower())
+            setFinButton(@((!Model.IsFinished).ToString().ToLower()));
 
     </script>
 }
