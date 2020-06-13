@@ -101,3 +101,22 @@ create table User_Project
 	ProjectId int constraint user_project_fk references Project(Id),
 	StatusId int constraint project_status_fk references ProjectStatus(Id)
 )
+
+create table Vacancy
+(
+	Id int primary key identity,
+	[Name] varchar(50),
+	StartDate date,
+	EndDate date,
+	[Description] varchar(1000),
+	Price int,
+	LocationId int,
+	constraint fk_vacancy_location foreign key (LocationId) references [Location](Id)
+)
+
+create table User_Vacancy
+(
+	Id int primary key identity,
+	UserId nvarchar(450) constraint vacancy_user_fk references AspNetUsers(Id),
+	VacancyId int constraint user_vacancy_fk references Vacancy(Id)
+)

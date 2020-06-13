@@ -18,6 +18,8 @@ namespace VolunteeringWebsite.Models
         {
         }
 
+        public virtual DbSet<User_Vacancy> User_Vacancy { get; set; }
+        public virtual DbSet<Vacancy> Vacancy { get; set; }
         public virtual DbSet<ProjectStatus> ProjectStatus { get; set; }
         public virtual DbSet<User_Project> User_Project { get; set; }
         public virtual DbSet<City> City { get; set; }
@@ -166,6 +168,21 @@ namespace VolunteeringWebsite.Models
                     .WithMany(p => p.User_Project)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("project_status_fk");
+            });
+
+            modelBuilder.Entity<User_Vacancy>(entity =>
+            {
+                entity.HasOne(d => d.Vacancy)
+                    .WithMany(p => p.User_Vacancy)
+                    .HasForeignKey(d => d.VacancyId)
+                    .HasConstraintName("user_vacancy_fk");
+            });
+
+            modelBuilder.Entity<Vacancy>(entity =>
+            {
+                entity.Property(e => e.Description).IsUnicode(false);
+
+                entity.Property(e => e.Name).IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

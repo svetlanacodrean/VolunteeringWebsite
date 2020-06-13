@@ -1,0 +1,62 @@
+﻿@page
+@model VolunteeringWebsite.Vacancies.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="padding-different">
+<h1>Create</h1>
+
+<h4>Vacancy</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Vacancy.Name" class="control-label"></label>
+                <input asp-for="Vacancy.Name" class="form-control" />
+                <span asp-validation-for="Vacancy.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vacancy.StartDate" class="control-label"></label>
+                <input asp-for="Vacancy.StartDate" class="form-control" />
+                <span asp-validation-for="Vacancy.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vacancy.EndDate" class="control-label"></label>
+                <input asp-for="Vacancy.EndDate" class="form-control" />
+                <span asp-validation-for="Vacancy.EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vacancy.Description" class="control-label"></label>
+                <input asp-for="Vacancy.Description" class="form-control" />
+                <span asp-validation-for="Vacancy.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vacancy.Price" class="control-label"></label>
+                <input asp-for="Vacancy.Price" class="form-control" />
+                <span asp-validation-for="Vacancy.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vacancy.LocationId" class="control-label"></label>
+                <input asp-for="Vacancy.LocationId" class="form-control" />
+                <span asp-validation-for="Vacancy.LocationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
