@@ -28,7 +28,11 @@ namespace VolunteeringWebsite.Vacancies
                 return NotFound();
             }
 
-            Vacancy = await _context.Vacancy.FirstOrDefaultAsync(m => m.Id == id);
+            Vacancy = await _context.Vacancy
+                .Include(p => p.Location)
+                .ThenInclude(l => l.City)
+                .ThenInclude(c => c.Country)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Vacancy == null)
             {

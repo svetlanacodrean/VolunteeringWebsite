@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,16 @@ namespace VolunteeringWebsite.Vacancies
         [BindProperty]
         public Vacancy Vacancy { get; set; }
 
+        [Display(Name = "Country")]
+        [BindProperty]
+        [Required]
+        public int CountryId { get; set; }
+
+        [Display(Name = "City")]
+        [BindProperty]
+        [Required]
+        public string CityName { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -29,7 +40,16 @@ namespace VolunteeringWebsite.Vacancies
                 return NotFound();
             }
 
-            Vacancy = await _context.Vacancy.FirstOrDefaultAsync(m => m.Id == id);
+            Vacancy = await _context.Vacancy
+                .Include(p => p.Location)
+                .ThenInclude(l => l.City)
+                .ThenInclude(c => c.Country)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
+
+            CityName = Vacancy.Location.City.Name;
+            CountryId = Vacancy.Location.City.Country.Id;
 
             if (Vacancy == null)
             {
@@ -44,8 +64,29 @@ namespace VolunteeringWebsite.Vacancies
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CountryId"] = new SelectList(_context.Country, "Id", "Name");
                 return Page();
             }
+
+            var location = await _context.Location
+                .Include(l => l.City)
+                .FirstOrDefaultAsync(m => m.Id == Vacancy.LocationId);
+
+            if (location == null)
+            {
+                location = new Location();
+                Vacancy.Location = location;
+            }
+
+            City city = await _context.City.FirstOrDefaultAsync(c => c.Name == CityName && c.CountryId == CountryId);
+            if (city == null)
+            {
+                city = new City();
+                city.Name = CityName;
+                city.CountryId = CountryId;
+            }
+
+            location.City = city;
 
             _context.Attach(Vacancy).State = EntityState.Modified;
 

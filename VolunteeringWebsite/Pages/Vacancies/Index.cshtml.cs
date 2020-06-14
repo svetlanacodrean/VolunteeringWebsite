@@ -22,7 +22,11 @@ namespace VolunteeringWebsite.Vacancies
 
         public async Task OnGetAsync()
         {
-            Vacancy = await _context.Vacancy.ToListAsync();
+            Vacancy = await _context.Vacancy
+                .Include(v => v.Location)
+                .ThenInclude(l => l.City)
+                .ThenInclude(c => c.Country)
+                .ToListAsync();
         }
     }
 }

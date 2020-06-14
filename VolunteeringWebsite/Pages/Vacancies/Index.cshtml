@@ -26,13 +26,10 @@
                 @Html.DisplayNameFor(model => model.Vacancy[0].EndDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Vacancy[0].Description)
+                @Html.DisplayNameFor(model => model.Vacancy[0].Location)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Vacancy[0].Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vacancy[0].LocationId)
             </th>
             <th></th>
         </tr>
@@ -50,13 +47,10 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Location.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationId)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

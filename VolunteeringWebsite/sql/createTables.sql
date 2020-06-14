@@ -1,4 +1,5 @@
-﻿create table Project (
+﻿
+create table Project (
 	Id int primary key identity,
 	[Name] varchar(255),
 	StartDate date not null,
@@ -7,6 +8,19 @@
 	Activities varchar(1000),
 	CoinsGiven int not null
 )
+
+alter table Project
+	add LocationId int 
+
+alter table Project
+	add constraint fk_project_location foreign key (LocationId) references [Location](Id)
+
+alter table Project
+	add TopicId int
+
+alter table Project
+	add constraint fk_project_topic foreign key (TopicId) references Topic(Id)
+
 
 CREATE TABLE Country (
   Id  int PRIMARY KEY IDENTITY,
@@ -29,22 +43,12 @@ CityId int,
 constraint fk_location_city foreign key (CityId) references City(Id)
 )
 
-alter table Project
-add LocationId int 
-
-alter table Project
-add constraint fk_project_location foreign key (LocationId) references [Location](Id)
 
 create table Topic (
 	Id int primary key identity,
 	[Name] varchar(80)
 )
 
-alter table Project
-	add TopicId int
-
-alter table Project
-	add constraint fk_project_topic foreign key (TopicId) references Topic(Id)
 
 create table [Language]
 (
