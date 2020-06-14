@@ -32,6 +32,13 @@ namespace VolunteeringWebsite.Models
         public virtual DbSet<Project_Skill> Project_Skill { get; set; }
         public virtual DbSet<Skill> Skill { get; set; }
         public virtual DbSet<Topic> Topic { get; set; }
+        public virtual DbSet<Background> Background { get; set; }
+        public virtual DbSet<Education> Education { get; set; }
+        public virtual DbSet<Gender> Gender { get; set; }
+        public virtual DbSet<LevelOfEducation> LevelOfEducation { get; set; }
+        public virtual DbSet<Volunteer> Volunteer { get; set; }
+        public virtual DbSet<Volunteer_Language> Volunteer_Language { get; set; }
+        public virtual DbSet<Volunteer_Skill> Volunteer_Skill { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -183,6 +190,72 @@ namespace VolunteeringWebsite.Models
                 entity.Property(e => e.Description).IsUnicode(false);
 
                 entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+
+            modelBuilder.Entity<Background>(entity =>
+            {
+                entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Education>(entity =>
+            {
+                entity.Property(e => e.InstituteName).IsUnicode(false);
+
+                entity.HasOne(d => d.Background)
+                    .WithMany(p => p.Education)
+                    .HasForeignKey(d => d.BackgroundId)
+                    .HasConstraintName("education_background_fk");
+
+                entity.HasOne(d => d.LevelOfEducationNavigation)
+                    .WithMany(p => p.Education)
+                    .HasForeignKey(d => d.LevelOfEducation)
+                    .HasConstraintName("education_level_fk");
+            });
+
+            modelBuilder.Entity<Gender>(entity =>
+            {
+                entity.Property(e => e.Name).IsUnicode(false);
+
+                entity.Property(e => e.ShortName).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<LevelOfEducation>(entity =>
+            {
+                entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Volunteer>(entity =>
+            {
+                entity.Property(e => e.FirstName).IsUnicode(false);
+
+                entity.Property(e => e.LastName).IsUnicode(false);
+
+                entity.HasOne(d => d.Education)
+                    .WithMany(p => p.Volunteer)
+                    .HasForeignKey(d => d.EducationId)
+                    .HasConstraintName("volunteer_education_fk");
+
+                entity.HasOne(d => d.Gender)
+                    .WithMany(p => p.Volunteer)
+                    .HasForeignKey(d => d.GenderId)
+                    .HasConstraintName("volunteer_gender_fk");
+            });
+
+            modelBuilder.Entity<Volunteer_Language>(entity =>
+            {
+                entity.HasOne(d => d.Volunteer)
+                    .WithMany(p => p.Volunteer_Language)
+                    .HasForeignKey(d => d.VolunteerId)
+                    .HasConstraintName("volunteer_language_fk");
+            });
+
+            modelBuilder.Entity<Volunteer_Skill>(entity =>
+            {
+                entity.HasOne(d => d.Volunteer)
+                    .WithMany(p => p.Volunteer_Skill)
+                    .HasForeignKey(d => d.VolunteerId)
+                    .HasConstraintName("volunteer_skill_fk");
             });
 
             OnModelCreatingPartial(modelBuilder);

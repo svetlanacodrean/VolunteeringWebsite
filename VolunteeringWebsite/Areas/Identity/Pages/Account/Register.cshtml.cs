@@ -75,7 +75,7 @@ namespace VolunteeringWebsite.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new VolunteeringWebsiteUser { UserName = Input.Email, Email = Input.Email };
+                var user = new VolunteeringWebsiteUser { UserName = Input.Email, Email = Input.Email, Volunteer = new Models.Volunteer() };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -91,6 +91,8 @@ namespace VolunteeringWebsite.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

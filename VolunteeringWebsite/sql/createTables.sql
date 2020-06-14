@@ -124,3 +124,58 @@ create table User_Vacancy
 	UserId nvarchar(450) constraint vacancy_user_fk references AspNetUsers(Id),
 	VacancyId int constraint user_vacancy_fk references Vacancy(Id)
 )
+
+create table Gender(
+	Id int primary key identity,
+	[Name] varchar(50),
+	ShortName varchar(2)
+)
+
+create table LevelOfEducation (
+	Id int primary key identity,
+	[Name] varchar(50)
+)
+
+create table Background (
+	Id int primary key identity,
+	[Name] varchar(50)
+)
+
+create table Education (
+	Id int primary key identity,
+	InstituteName varchar(50),
+	StartDate date,
+	EndDate date,
+	BackgroundId int constraint education_background_fk references Background(Id),
+	CountryId int constraint education_country_fk references Country(Id) ,
+	LevelOfEducation int constraint education_level_fk references LevelOfEducation(Id) 
+)
+
+create table Volunteer(
+	Id int primary key identity,
+	FirstName varchar(50),
+	LastName varchar(50),
+	GenderId int constraint volunteer_gender_fk references Gender(Id),
+	BirthDate Date,
+	NationalityId int constraint volunteer_nationality_fk references Country(Id),
+	EducationId int constraint volunteer_education_fk references Education(Id),
+	NumberOfCoins int
+)
+
+create table Volunteer_Language(
+	Id int primary key identity,
+	VolunteerId int constraint volunteer_language_fk references Volunteer(Id),
+	LanguageId int constraint language_volunteer_fk references [Language](Id),
+)
+
+create table Volunteer_Skill(
+	Id int primary key identity,
+	VolunteerId int constraint volunteer_skill_fk references Volunteer(Id),
+	SkillId int constraint skill_volunteer_fk references Skill(Id),
+)
+
+alter table AspNetUsers
+	add VolunteerId int 
+
+alter table AspNetUsers
+	add constraint fk_user_volunteer foreign key (VolunteerId) references Volunteer(Id)
