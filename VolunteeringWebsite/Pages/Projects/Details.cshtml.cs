@@ -45,12 +45,31 @@ namespace VolunteeringWebsite
 
             var user = await _userManager.GetUserAsync(User);
 
+            Volunteer volunteer = null;
+
+            if (user != null && user.VolunteerId.HasValue)
+                volunteer = await _context.Volunteer.FirstOrDefaultAsync(v => v.Id == user.VolunteerId);
+
+            if (volunteer == null)
+            {
+                return new JsonResult(new { finished = false });
+            }
+
+            if (!volunteer.NumberOfCoins.HasValue)
+                volunteer.NumberOfCoins = 0;
+
+            Project = await _context.Project.FirstOrDefaultAsync(m => m.Id == id);
+            volunteer.NumberOfCoins += Project.CoinsGiven;
+
+            _context.Attach(volunteer).State = EntityState.Modified;
+
             var userProject = await _context.User_Project.FirstOrDefaultAsync(up => up.ProjectId == id.Value && up.UserId == user.Id);
 
             if (userProject != null)
             {
                 userProject.StatusId = Const.ProjectStatus.finished;
                 _context.Attach(userProject).State = EntityState.Modified;
+
 
                 try
                 {

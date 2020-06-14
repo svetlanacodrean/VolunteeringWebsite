@@ -75,7 +75,10 @@ namespace VolunteeringWebsite.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new VolunteeringWebsiteUser { UserName = Input.Email, Email = Input.Email, Volunteer = new Models.Volunteer() };
+                var user = new VolunteeringWebsiteUser { UserName = Input.Email, Email = Input.Email, Volunteer = new Models.Volunteer 
+                {
+                    NumberOfCoins = 0
+                } };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

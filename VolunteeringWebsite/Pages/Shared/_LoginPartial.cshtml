@@ -1,25 +1,48 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using VolunteeringWebsite.Areas.Identity.Data
+@using VolunteeringWebsite.Models
+@using Microsoft.EntityFrameworkCore
 
 @inject SignInManager<VolunteeringWebsiteUser> SignInManager
 @inject UserManager<VolunteeringWebsiteUser> UserManager
+@inject VolunteeringDatabaseContext _context;
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    Volunteer volunteer = null;
+
+    if (user != null && user.VolunteerId.HasValue)
+    {
+        volunteer = await _context.Volunteer.FirstOrDefaultAsync(v => v.Id == user.VolunteerId);
+    }
+
+    int numberOfCoins = 0;
+    
+    if (volunteer.NumberOfCoins.HasValue)
+        numberOfCoins = volunteer.NumberOfCoins.Value;
+}
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a id="manage" class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Profile</a>
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="btn btn-primary" id="login" asp-area="Identity" asp-page="/account/login">Sign In/Join</a>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a id="manage" class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Profile</a>
+        </li>
+        <li class="nav-item">
+            
+            <span class=" nav-link btn btn-link text-dark">@numberOfCoins <i class="fa fa-money text-success"></i></span>
+            
+        </li>
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="btn btn-primary" id="login" asp-area="Identity" asp-page="/account/login">Sign In/Join</a>
+        </li>
+    }
 </ul>

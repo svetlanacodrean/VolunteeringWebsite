@@ -60,15 +60,23 @@ namespace VolunteeringWebsite.Vacancies
                 return new JsonResult(new { applied = false });
 
             var user = await _userManager.GetUserAsync(User);
+            if (user == null || !user.VolunteerId.HasValue)
+                return new JsonResult(new { applied = false });
 
             var userVacancy = await _context.User_Vacancy.FirstOrDefaultAsync(uv => uv.VacancyId == id.Value && uv.UserId == user.Id);
 
-            if (userVacancy != null)
+            var volunteer = await _context.Volunteer.FirstOrDefaultAsync(v => v.Id == user.VolunteerId);
+            Vacancy = await _context.Vacancy.FirstOrDefaultAsync(v => v.Id == id);
+
+            if (userVacancy != null || volunteer == null || !volunteer.NumberOfCoins.HasValue || volunteer.NumberOfCoins < Vacancy.Price)
             {
                 return new JsonResult(new { applied = false });
             }
             else
             {
+                volunteer.NumberOfCoins -= Vacancy.Price;
+                _context.Attach(volunteer).State = EntityState.Modified;
+
                 _context.User_Vacancy.Add(new User_Vacancy
                 {
                     VacancyId = id.Value,
