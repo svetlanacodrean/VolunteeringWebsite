@@ -1,58 +1,112 @@
 ﻿@page
 @model VolunteeringWebsite.Vacancies.DetailsModel
 
+@using Microsoft.AspNetCore.Identity
+@using VolunteeringWebsite.Areas.Identity.Data
+
+@inject UserManager<VolunteeringWebsiteUser> UserManager
+
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Pages/Shared/_Layout.cshtml";
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <div class="padding-different">
-<h1>Details</h1>
+    <h1>Details</h1>
 
-<div>
-    <h4>Vacancy</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.StartDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.StartDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.EndDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.EndDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.Location)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.Location.FullName)
-        </dd>
-    </dl>
+    <div>
+        <h4>Vacancy</h4>
+        <hr />
+        @if (user != null && !user.IsAdmin)
+        { 
+            <div class="text-right mr-5">
+                <button class="btn btn-outline-primary"
+                        onclick="getClick()"
+                        id="btn-get">
+                    Apply for Vacancy
+                </button>
+            </div>
+        }
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Vacancy.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Vacancy.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Vacancy.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Vacancy.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Vacancy.EndDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Vacancy.EndDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Vacancy.Location)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Vacancy.Location.FullName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Vacancy.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.TextAreaFor(model => model.Vacancy.Description, 3, 50, new { @readonly = true })
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Vacancy.Price)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Vacancy.Price)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        @if (user != null && user.IsAdmin)
+        { 
+            <a asp-page="./Edit" asp-route-id="@Model.Vacancy.Id">Edit</a>
+            <span>|</span>
+        }
+        <a asp-page="./Index">Back to List</a>
+    </div>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Vacancy.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
-</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function getClick() {
+            $.ajax({
+                type: 'POST',
+                url: '/Vacancies/Details/?handler=Apply&id=@Model.Vacancy.Id',
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                }
+            }).done(function (result) {
+                if (result.applied) {
+                    setApplyButton(false);
+                    createOkWindow("You applied for the vacancy! The details will be sent by email.");
+                } else {
+                    showSnack('Failed to apply!');
+                }
+            });
+        }
+
+        function setApplyButton(enabled) {
+            $('#btn-get').prop('disabled', !enabled);
+
+            if (enabled)
+                $('#btn-get').html('Apply for Vacancy');
+            else
+                $('#btn-get').html('Applied');
+        }
+
+        setApplyButton(@((!Model.IsApplied).ToString().ToLower()));
+
+    </script>
+}

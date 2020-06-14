@@ -31,16 +31,6 @@
                 <input asp-for="Vacancy.EndDate" class="form-control" />
                 <span asp-validation-for="Vacancy.EndDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Vacancy.Description" class="control-label"></label>
-                <input asp-for="Vacancy.Description" class="form-control" />
-                <span asp-validation-for="Vacancy.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vacancy.Price" class="control-label"></label>
-                <input asp-for="Vacancy.Price" class="form-control" />
-                <span asp-validation-for="Vacancy.Price" class="text-danger"></span>
-            </div>
             <div class="form-row">
                 <div class="form-group group col-md-6">
                     <label asp-for="CountryId" class="control-label"></label>
@@ -51,6 +41,16 @@
                     <input asp-for="CityName" class="form-control location-input" />
                     <span asp-validation-for="CityName" class="text-danger"></span>
                 </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vacancy.Description" class="control-label"></label>
+                <textarea asp-for="Vacancy.Description" class="form-control"></textarea>
+                <span asp-validation-for="Vacancy.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vacancy.Price" class="control-label"></label>
+                <input asp-for="Vacancy.Price" class="form-control" />
+                <span asp-validation-for="Vacancy.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

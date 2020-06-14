@@ -318,6 +318,10 @@ a.k-grid-add {
     background-color: #8b4b9b;
 }
 
+.bg-orange {
+    background-color: #ff7043;
+}
+
 .hover-purple:hover {
     border-color: #8b4b9b;
     background-color: white;

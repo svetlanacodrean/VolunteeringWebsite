@@ -33,22 +33,16 @@
             @Html.DisplayFor(model => model.Vacancy.EndDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.Description)
+            @Html.DisplayNameFor(model => model.Vacancy.Location)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.Description)
+            @Html.DisplayFor(model => model.Vacancy.Location.FullName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Vacancy.Price)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Vacancy.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vacancy.Location)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vacancy.Location.FullName)
         </dd>
     </dl>
     

@@ -1,64 +1,83 @@
 ﻿@page
 @model VolunteeringWebsite.Vacancies.IndexModel
 
+@using Microsoft.AspNetCore.Identity
+@using VolunteeringWebsite.Areas.Identity.Data
+
+@inject UserManager<VolunteeringWebsiteUser> UserManager
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
+
+    var user = await UserManager.GetUserAsync(User);
 }
 
-<h1>Index</h1>
+<h1 class="p-3 mb-2 bg-orange text-white">Vacancies</h1>
 
 <div class="padding-7">
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Vacancy[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vacancy[0].StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vacancy[0].EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vacancy[0].Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vacancy[0].Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Vacancy) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    @if (user != null && user.IsAdmin)
+    { 
+        <p>
+            <a asp-page="Create">Create New</a>
+        </p>
+    }        
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vacancy[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vacancy[0].StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vacancy[0].EndDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vacancy[0].Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vacancy[0].Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Vacancy)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @if (user != null && user.IsAdmin)
+                        { 
+                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> 
+                            <span>|</span>
+                        }
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                        @if (user != null && user.IsAdmin)
+                        { 
+                            <span>|</span>
+                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
