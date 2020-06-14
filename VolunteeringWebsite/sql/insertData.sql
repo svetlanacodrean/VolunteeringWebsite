@@ -351,3 +351,20 @@ insert into ProjectStatus values
 ('Favourites'),
 ('Applied'),
 ('Finished')
+
+insert into Gender 
+values('Male', 'M'),
+('Female', 'F'),
+('Other', 'O')
+
+insert into Background
+values('Accounting'),
+('IT Software'),
+('IT Hardware'),
+('Economics')
+
+insert into LevelOfEducation
+values('High School'),
+('Bachelor'),
+('Masters'),
+('Phd')

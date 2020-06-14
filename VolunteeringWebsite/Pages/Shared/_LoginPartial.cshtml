@@ -17,16 +17,22 @@
     }
 
     int numberOfCoins = 0;
-    
-    if (volunteer.NumberOfCoins.HasValue)
+
+    if (volunteer != null && volunteer.NumberOfCoins.HasValue)
         numberOfCoins = volunteer.NumberOfCoins.Value;
+
+    string name = "My Profile";
+    if (volunteer != null)
+        name = $"{volunteer.FirstName} {volunteer.LastName}";
+    else if (user != null)
+        name = user.UserName;
 }
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a id="manage" class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Profile</a>
+            <a class="nav-link btn btn-link text-dark" asp-page="/Profile">@name</a>
         </li>
         <li class="nav-item">
             
