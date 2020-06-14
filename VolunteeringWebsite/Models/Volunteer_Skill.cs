@@ -15,5 +15,8 @@ namespace VolunteeringWebsite.Models
         [ForeignKey(nameof(VolunteerId))]
         [InverseProperty("Volunteer_Skill")]
         public virtual Volunteer Volunteer { get; set; }
+
+        [ForeignKey(nameof(SkillId))]
+        public virtual Skill Skill { get; set; }
     }
 }

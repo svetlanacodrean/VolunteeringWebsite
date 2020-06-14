@@ -15,5 +15,8 @@ namespace VolunteeringWebsite.Models
         [ForeignKey(nameof(VolunteerId))]
         [InverseProperty("Volunteer_Language")]
         public virtual Volunteer Volunteer { get; set; }
+
+        [ForeignKey(nameof(LanguageId))]
+        public virtual Language Language { get; set; }
     }
 }

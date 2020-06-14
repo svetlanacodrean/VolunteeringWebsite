@@ -6,92 +6,108 @@
 }
 <div class="padding-different">
 
-<h1>Profile</h1>
+    <h1>Profile</h1>
 
-<h4>Volunteer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Volunteer.Id" />
-            <div class="form-group">
-                <label asp-for="Volunteer.FirstName" class="control-label"></label>
-                <input asp-for="Volunteer.FirstName" class="form-control" />
-                <span asp-validation-for="Volunteer.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.LastName" class="control-label"></label>
-                <input asp-for="Volunteer.LastName" class="form-control" />
-                <span asp-validation-for="Volunteer.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.GenderId" class="control-label"></label>
-                <select asp-for="Volunteer.GenderId" class="form-control" asp-items="ViewBag.GenderId"></select>
-                <span asp-validation-for="Volunteer.GenderId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.BirthDate" class="control-label"></label>
-                <input asp-for="Volunteer.BirthDate" class="form-control" />
-                <span asp-validation-for="Volunteer.BirthDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.NationalityId" class="control-label"></label>
-                <select asp-for="Volunteer.NationalityId" class="form-control" asp-items="ViewBag.NationalityId"></select>
-                <span asp-validation-for="Volunteer.NationalityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.NumberOfCoins" class="control-label"></label>
-                <input asp-for="Volunteer.NumberOfCoins" class="form-control" readonly="readonly" />
-            </div>
-
-            <br />
-            <h4>Education</h4>
-            <hr />
-
-            <div class="form-group">
-                <label asp-for="Volunteer.Education.InstituteName" class="control-label"></label>
-                <input asp-for="Volunteer.Education.InstituteName" class="form-control" />
-                <span asp-validation-for="Volunteer.Education.InstituteName" class="text-danger"></span>
-            </div>
-            <div class="form-row">
-                <div class="form-group  col-md-6">
-                    <label asp-for="Volunteer.Education.StartDate" class="control-label"></label>
-                    <input asp-for="Volunteer.Education.StartDate" class="form-control" />
-                    <span asp-validation-for="Volunteer.Education.StartDate" class="text-danger"></span>
+    <h4>Volunteer</h4>
+    <hr />
+    <a id="manage" class="btn btn-link mb-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Go to User Profile</a>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Volunteer.Id" />
+                <div class="form-group">
+                    <label asp-for="Volunteer.FirstName" class="control-label"></label>
+                    <input asp-for="Volunteer.FirstName" class="form-control" />
+                    <span asp-validation-for="Volunteer.FirstName" class="text-danger"></span>
                 </div>
-                <div class="form-group  col-md-6">
-                    <label asp-for="Volunteer.Education.EndDate" class="control-label"></label>
-                    <input asp-for="Volunteer.Education.EndDate" class="form-control" />
-                    <span asp-validation-for="Volunteer.Education.EndDate" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Volunteer.LastName" class="control-label"></label>
+                    <input asp-for="Volunteer.LastName" class="form-control" />
+                    <span asp-validation-for="Volunteer.LastName" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.Education.BackgroundId" class="control-label"></label>
-                <select asp-for="Volunteer.Education.BackgroundId" class="form-control" asp-items="ViewBag.BackgroundId"></select>
-                <span asp-validation-for="Volunteer.Education.BackgroundId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.Education.CountryId" class="control-label"></label>
-                <select asp-for="Volunteer.Education.CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
-                <span asp-validation-for="Volunteer.Education.CountryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Volunteer.Education.LevelOfEducation" class="control-label"></label>
-                <select asp-for="Volunteer.Education.LevelOfEducation" class="form-control" asp-items="ViewBag.LevelOfEducation"></select>
-                <span asp-validation-for="Volunteer.Education.LevelOfEducation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="Volunteer.GenderId" class="control-label"></label>
+                    <select asp-for="Volunteer.GenderId" class="form-control" asp-items="ViewBag.GenderId"></select>
+                    <span asp-validation-for="Volunteer.GenderId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Volunteer.BirthDate" class="control-label"></label>
+                    <input asp-for="Volunteer.BirthDate" class="form-control" />
+                    <span asp-validation-for="Volunteer.BirthDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Volunteer.NationalityId" class="control-label"></label>
+                    <select asp-for="Volunteer.NationalityId" class="form-control" asp-items="ViewBag.NationalityId"></select>
+                    <span asp-validation-for="Volunteer.NationalityId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Volunteer.NumberOfCoins" class="control-label"></label>
+                    <input asp-for="Volunteer.NumberOfCoins" class="form-control" readonly="readonly" />
+                </div>
+
+                <br />
+                <h4>Education</h4>
+                <hr />
+
+                <div class="form-group">
+                    <label asp-for="Volunteer.Education.InstituteName" class="control-label"></label>
+                    <input asp-for="Volunteer.Education.InstituteName" class="form-control" />
+                    <span asp-validation-for="Volunteer.Education.InstituteName" class="text-danger"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group  col-md-6">
+                        <label asp-for="Volunteer.Education.StartDate" class="control-label"></label>
+                        <input asp-for="Volunteer.Education.StartDate" class="form-control" />
+                        <span asp-validation-for="Volunteer.Education.StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group  col-md-6">
+                        <label asp-for="Volunteer.Education.EndDate" class="control-label"></label>
+                        <input asp-for="Volunteer.Education.EndDate" class="form-control" />
+                        <span asp-validation-for="Volunteer.Education.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Volunteer.Education.BackgroundId" class="control-label"></label>
+                    <select asp-for="Volunteer.Education.BackgroundId" class="form-control" asp-items="ViewBag.BackgroundId"></select>
+                    <span asp-validation-for="Volunteer.Education.BackgroundId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Volunteer.Education.CountryId" class="control-label"></label>
+                    <select asp-for="Volunteer.Education.CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
+                    <span asp-validation-for="Volunteer.Education.CountryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Volunteer.Education.LevelOfEducation" class="control-label"></label>
+                    <select asp-for="Volunteer.Education.LevelOfEducation" class="form-control" asp-items="ViewBag.LevelOfEducation"></select>
+                    <span asp-validation-for="Volunteer.Education.LevelOfEducation" class="text-danger"></span>
+                </div>
+                <input asp-for="VolunteerLanguageList" class="form-control" style="visibility:hidden; width:0; height:0" />
+                <div class="form-group">
+                    <label class="control-label">Languages</label>
+                    <div id="language-grid"></div>
+                </div>
+                <input asp-for="VolunteerSkillList" class="form-control" style="visibility:hidden; width:0; height:0" />
+                <div class="form-group">
+                    <label class="control-label">Skills Required</label>
+                    <div id="skill-grid"></div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 </div>
 @section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            createLanguageList2(@Html.Raw(Model.VolunteerLanguageList), @Html.Raw(Model.LanguageList));
+            createSkillList2(@Html.Raw(Model.VolunteerSkillList), @Html.Raw(Model.SkillList));
+        });
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 }

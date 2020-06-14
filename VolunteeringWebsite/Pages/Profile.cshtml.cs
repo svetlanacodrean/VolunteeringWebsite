@@ -27,6 +27,18 @@ namespace VolunteeringWebsite.Pages
         [BindProperty]
         public Volunteer Volunteer { get; set; }
 
+        [BindProperty]
+        public string VolunteerLanguageList { get; set; }
+
+        [BindProperty]
+        public string LanguageList { get; set; }
+
+        [BindProperty]
+        public string VolunteerSkillList { get; set; }
+
+        [BindProperty]
+        public string SkillList { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -48,6 +60,33 @@ namespace VolunteeringWebsite.Pages
             {
                 return NotFound();
             }
+
+            var languages = await _context.Language.ToListAsync();
+            LanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(languages);
+
+            var volunteerLanguage = _context.Volunteer_Language
+                .Where(l => l.VolunteerId == Volunteer.Id)
+                .Include(vl => vl.Language);
+
+            foreach (var pl in volunteerLanguage)
+            {
+                pl.Volunteer = null;
+            }
+            VolunteerLanguageList = Newtonsoft.Json.JsonConvert.SerializeObject(volunteerLanguage);
+
+            var skills = await _context.Skill.ToListAsync();
+            SkillList = Newtonsoft.Json.JsonConvert.SerializeObject(skills);
+
+            var volunteerSkill = _context.Volunteer_Skill
+                .Where(s => s.VolunteerId == Volunteer.Id)
+                .Include(vs => vs.Skill);
+
+            foreach (var vs in volunteerSkill)
+            {
+                vs.Volunteer = null;
+            }
+            VolunteerSkillList = Newtonsoft.Json.JsonConvert.SerializeObject(volunteerSkill);
+
             return Page();
         }
 
@@ -59,6 +98,44 @@ namespace VolunteeringWebsite.Pages
             {
                 
                 return Page();
+            }
+
+            var projectLanguageDB = await _context.Volunteer_Language.Where(l => l.VolunteerId == Volunteer.Id).ToListAsync();
+            var projectLanguagePage = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Volunteer_Language>>(VolunteerLanguageList);
+            foreach (var pl in projectLanguagePage)
+            {
+                pl.LanguageId = pl.Language.Id;
+                pl.VolunteerId = Volunteer.Id;
+                pl.Language = null;
+            }
+            foreach (var pl in projectLanguageDB)
+            {
+                if (projectLanguagePage.Where(l => l.LanguageId == pl.LanguageId).Count() == 0)
+                    _context.Volunteer_Language.Remove(pl);
+            }
+            foreach (var pl in projectLanguagePage)
+            {
+                if (projectLanguageDB.Where(l => l.LanguageId == pl.LanguageId).Count() == 0)
+                    _context.Volunteer_Language.Add(pl);
+            }
+
+            var projectSkillDB = await _context.Volunteer_Skill.Where(l => l.VolunteerId == Volunteer.Id).ToListAsync();
+            var projectSkillPage = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Volunteer_Skill>>(VolunteerSkillList);
+            foreach (var pl in projectSkillPage)
+            {
+                pl.SkillId = pl.Skill.Id;
+                pl.VolunteerId = Volunteer.Id;
+                pl.Skill = null;
+            }
+            foreach (var pl in projectSkillDB)
+            {
+                if (projectSkillPage.Where(l => l.SkillId == pl.SkillId).Count() == 0)
+                    _context.Volunteer_Skill.Remove(pl);
+            }
+            foreach (var pl in projectSkillPage)
+            {
+                if (projectSkillDB.Where(l => l.SkillId == pl.SkillId).Count() == 0)
+                    _context.Volunteer_Skill.Add(pl);
             }
 
             _context.Attach(Volunteer).State = EntityState.Modified;
@@ -90,7 +167,6 @@ namespace VolunteeringWebsite.Pages
             ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "Id", "Name");
             ViewData["LevelOfEducation"] = new SelectList(_context.Set<LevelOfEducation>(), "Id", "Name");
 
-            //ViewData["EducationId"] = new SelectList(_context.Set<Education>(), "Id", "Id");
             return base.Page();
         }
 
