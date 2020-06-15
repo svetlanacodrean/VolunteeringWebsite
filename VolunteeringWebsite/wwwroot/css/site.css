@@ -332,3 +332,8 @@ a.k-grid-add {
     margin-right: 65px;
 }
 
+.coin {
+    width: 18px;
+    height: 18px;
+    margin-top: -2px;
+}
