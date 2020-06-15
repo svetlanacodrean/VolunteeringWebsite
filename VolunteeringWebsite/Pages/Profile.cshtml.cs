@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,11 @@ namespace VolunteeringWebsite.Pages
         [BindProperty]
         public string SkillList { get; set; }
 
+        [BindProperty]
+        [Phone]
+        [Display(Name = "Phone number")]
+        public string PhoneNumber { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -51,6 +57,8 @@ namespace VolunteeringWebsite.Pages
             {
                 return RedirectToPage("/Account/Manage/Index", new { area = "Identity" });
             }
+
+            PhoneNumber = user.PhoneNumber;
 
             Volunteer = await _context.Volunteer
                 .Include(v => v.Education)
@@ -96,7 +104,6 @@ namespace VolunteeringWebsite.Pages
         {
             if (!ModelState.IsValid)
             {
-                
                 return Page();
             }
 
@@ -139,6 +146,11 @@ namespace VolunteeringWebsite.Pages
             }
 
             _context.Attach(Volunteer).State = EntityState.Modified;
+
+            var user = await _userManager.GetUserAsync(User);
+            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            if (PhoneNumber != phoneNumber)
+                await _userManager.SetPhoneNumberAsync(user, PhoneNumber);
 
             try
             {

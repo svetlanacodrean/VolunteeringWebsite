@@ -21,11 +21,16 @@
     if (volunteer != null && volunteer.NumberOfCoins.HasValue)
         numberOfCoins = volunteer.NumberOfCoins.Value;
 
-    string name = "My Profile";
+    string name = null;
+    
     if (volunteer != null)
         name = $"{volunteer.FirstName} {volunteer.LastName}";
-    else if (user != null)
+
+    if (user != null && string.IsNullOrWhiteSpace(name))
         name = user.UserName;
+
+    if (string.IsNullOrWhiteSpace(name))
+        name = "My Profile";
 }
 
 <ul class="navbar-nav">
