@@ -66,14 +66,12 @@
                     <td>
                         @if (user != null && user.IsAdmin)
                         { 
-                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> 
-                            <span>|</span>
+                            <a asp-page="./Edit" class="btn btn-outline-primary" asp-route-id="@item.Id">Edit</a> 
                         }
-                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                        <a asp-page="./Details" class="btn btn-outline-primary" asp-route-id="@item.Id">Details</a>
                         @if (user != null && user.IsAdmin)
                         { 
-                            <span>|</span>
-                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-page="./Delete" class="btn btn-outline-primary" asp-route-id="@item.Id">Delete</a>
                         }
                     </td>
                 </tr>
