@@ -6,98 +6,99 @@
 }
 
 <div class="padding-different">
-<h1>Edit</h1>
-<hr />
-<div class="row width-full">
-    <div class="col-md-5">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Project.Id" />
-            <div class="form-group">
-                <label asp-for="Project.Name" class="control-label"></label>
-                <input asp-for="Project.Name" class="form-control" />
-                <span asp-validation-for="Project.Name" class="text-danger"></span>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label asp-for="Project.StartDate" class="control-label"></label>
-                    <input asp-for="Project.StartDate" class="form-control" />
-                    <span asp-validation-for="Project.StartDate" class="text-danger"></span>
+    <input type="submit" value="Save" class="btn btn-primary" />
+    <hr />
+    <form method="post">
+        <div class="row width-full">
+            <div class="col-md-5">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Project.Id" />
+                <div class="form-group">
+                    <label asp-for="Project.Name" class="control-label"></label>
+                    <input asp-for="Project.Name" class="form-control" />
+                    <span asp-validation-for="Project.Name" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Project.EndDate" class="control-label"></label>
-                    <input asp-for="Project.EndDate" class="form-control" />
-                    <span asp-validation-for="Project.EndDate" class="text-danger"></span>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Project.StartDate" class="control-label"></label>
+                        <input asp-for="Project.StartDate" class="form-control" />
+                        <span asp-validation-for="Project.StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Project.EndDate" class="control-label"></label>
+                        <input asp-for="Project.EndDate" class="form-control" />
+                        <span asp-validation-for="Project.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input is-remote-ck" asp-for="IsRemote" onclick="toggleLocation()" /> @Html.DisplayNameFor(model => model.IsRemote)
+                    </label>
+                </div>
+                <div class="form-row">
+                    <div class="form-group group col-md-6">
+                        <label asp-for="CountryId" class="control-label"></label>
+                        <select asp-for="CountryId" class="form-control location-input" asp-items="ViewBag.CountryId"></select>
+                    </div>
+                    <div class="form-group group col-md-6">
+                        <label asp-for="CityName" class="control-label"></label>
+                        <input asp-for="CityName" class="form-control location-input" />
+                        <span asp-validation-for="CityName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="StreetName" class="control-label"></label>
+                        <input asp-for="StreetName" class="form-control location-input" />
+                        <span asp-validation-for="StreetName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="StreetNumber" class="control-label"></label>
+                        <input asp-for="StreetNumber" class="form-control location-input" />
+                        <span asp-validation-for="StreetNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Project.TopicId" class="control-label"></label>
+                    <select asp-for="Project.TopicId" class="form-control" asp-items="ViewBag.TopicId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Project.Description" class="control-label"></label>
+                    <textarea asp-for="Project.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Project.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Project.Activities" class="control-label"></label>
+                    <textarea asp-for="Project.Activities" class="form-control"></textarea>
+                    <span asp-validation-for="Project.Activities" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input is-remote-ck" asp-for="IsRemote" onclick="toggleLocation()" /> @Html.DisplayNameFor(model => model.IsRemote)
-                </label>
+            <div class="col-md-1">
             </div>
-            <div class="form-row">
-                <div class="form-group group col-md-6">
-                    <label asp-for="CountryId" class="control-label"></label>
-                    <select asp-for="CountryId" class="form-control location-input" asp-items="ViewBag.CountryId"></select>
+            <div class="col-md-5">
+                <input asp-for="ProjectLanguageList" class="form-control" style="visibility:hidden; width:0; height:0" />
+                <div class="form-group">
+                    <label class="control-label">Languages</label>
+                    <div id="language-grid"></div>
                 </div>
-                <div class="form-group group col-md-6">
-                    <label asp-for="CityName" class="control-label"></label>
-                    <input asp-for="CityName" class="form-control location-input" />
-                    <span asp-validation-for="CityName" class="text-danger"></span>
+                <input asp-for="ProjectSkillList" class="form-control" style="visibility:hidden; width:0; height:0" />
+                <div class="form-group">
+                    <label class="control-label">Skills Required</label>
+                    <div id="skill-grid"></div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label asp-for="StreetName" class="control-label"></label>
-                    <input asp-for="StreetName" class="form-control location-input" />
-                    <span asp-validation-for="StreetName" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Project.CoinsGiven" class="control-label"></label>
+                    <input asp-for="Project.CoinsGiven" class="form-control" />
+                    <span asp-validation-for="Project.CoinsGiven" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="StreetNumber" class="control-label"></label>
-                    <input asp-for="StreetNumber" class="form-control location-input" />
-                    <span asp-validation-for="StreetNumber" class="text-danger"></span>
-                </div>
+                <input asp-for="Project.LocationId" class="form-control" style="visibility:hidden; width:0; height:0" />
             </div>
-            <div class="form-group">
-                <label asp-for="Project.TopicId" class="control-label"></label>
-                <select asp-for="Project.TopicId" class="form-control" asp-items="ViewBag.TopicId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.Description" class="control-label"></label>
-                <textarea asp-for="Project.Description" class="form-control"></textarea>
-                <span asp-validation-for="Project.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.Activities" class="control-label"></label>
-                <textarea asp-for="Project.Activities" class="form-control"></textarea>
-                <span asp-validation-for="Project.Activities" class="text-danger"></span>
-            </div>
-            <input asp-for="ProjectLanguageList" class="form-control" style="visibility:hidden; width:0; height:0" />
-            <div class="form-group">
-                <label class="control-label">Languages</label>
-                <div id="language-grid"></div>
-            </div>
-            <input asp-for="ProjectSkillList" class="form-control" style="visibility:hidden; width:0; height:0" />
-            <div class="form-group">
-                <label class="control-label">Skills Required</label>
-                <div id="skill-grid"></div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.CoinsGiven" class="control-label"></label>
-                <input asp-for="Project.CoinsGiven" class="form-control" />
-                <span asp-validation-for="Project.CoinsGiven" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-            <input asp-for="Project.LocationId" class="form-control" style="visibility:hidden; width:0; height:0" />
-        </form>
-    </div>
-</div>
+        </div>
+    </form>
 
-<div>
-    <a asp-page="./Index" asp-route-place=@Model.Place>Back to List</a>
-</div>
+    <div>
+        <a asp-page="./Index" asp-route-place=@Model.Place>Back to List</a>
+    </div>
 </div>
 
 @section Scripts {

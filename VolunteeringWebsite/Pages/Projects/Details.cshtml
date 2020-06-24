@@ -13,7 +13,6 @@
 
 <div class="padding-different">
     <h1>Details</h1>
-
     <div>
         <hr />
         @if (user != null && !user.IsAdmin)
@@ -174,7 +173,7 @@
             }).done(function (result) {
                 if (result.finished) {
                     setFinButton(false);
-                    createOkWindow('The project is finished!');
+                    createOkWindow('Congratulations for finishing the project! Here are your coins!');
                 } else {
                     showSnack('Failed to finish!');
                 }

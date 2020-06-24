@@ -7,60 +7,59 @@
 }
 
 <div class="padding-different">
-<h1>Create</h1>
+    <input type="submit" value="Create" class="btn btn-primary" />
+    <hr />
+    <form method="post">
+        <div class="row">
+            <div class="col-md-5">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Vacancy.Name" class="control-label"></label>
+                    <input asp-for="Vacancy.Name" class="form-control" />
+                    <span asp-validation-for="Vacancy.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Vacancy.StartDate" class="control-label"></label>
+                    <input asp-for="Vacancy.StartDate" class="form-control" />
+                    <span asp-validation-for="Vacancy.StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Vacancy.EndDate" class="control-label"></label>
+                    <input asp-for="Vacancy.EndDate" class="form-control" />
+                    <span asp-validation-for="Vacancy.EndDate" class="text-danger"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group group col-md-6">
+                        <label asp-for="CountryId" class="control-label"></label>
+                        <select asp-for="CountryId" class="form-control location-input" asp-items="ViewBag.CountryId"></select>
+                    </div>
+                    <div class="form-group group col-md-6">
+                        <label asp-for="CityName" class="control-label"></label>
+                        <input asp-for="CityName" class="form-control location-input" />
+                        <span asp-validation-for="CityName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label asp-for="Vacancy.Description" class="control-label"></label>
+                    <textarea asp-for="Vacancy.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Vacancy.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Vacancy.Price" class="control-label"></label>
+                    <input asp-for="Vacancy.Price" class="form-control" />
+                    <span asp-validation-for="Vacancy.Price" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
 
-<h4>Vacancy</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Vacancy.Name" class="control-label"></label>
-                <input asp-for="Vacancy.Name" class="form-control" />
-                <span asp-validation-for="Vacancy.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vacancy.StartDate" class="control-label"></label>
-                <input asp-for="Vacancy.StartDate" class="form-control" />
-                <span asp-validation-for="Vacancy.StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vacancy.EndDate" class="control-label"></label>
-                <input asp-for="Vacancy.EndDate" class="form-control" />
-                <span asp-validation-for="Vacancy.EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-row">
-                <div class="form-group group col-md-6">
-                    <label asp-for="CountryId" class="control-label"></label>
-                    <select asp-for="CountryId" class="form-control location-input" asp-items="ViewBag.CountryId"></select>
-                </div>
-                <div class="form-group group col-md-6">
-                    <label asp-for="CityName" class="control-label"></label>
-                    <input asp-for="CityName" class="form-control location-input" />
-                    <span asp-validation-for="CityName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vacancy.Description" class="control-label"></label>
-                <textarea asp-for="Vacancy.Description" class="form-control"></textarea>
-                <span asp-validation-for="Vacancy.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vacancy.Price" class="control-label"></label>
-                <input asp-for="Vacancy.Price" class="form-control" />
-                <span asp-validation-for="Vacancy.Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div>
+        <a asp-page="Index">Back to List</a>
     </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
 </div>
 
 @section Scripts {

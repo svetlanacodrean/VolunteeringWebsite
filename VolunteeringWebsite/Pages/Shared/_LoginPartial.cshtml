@@ -40,9 +40,10 @@
             <a class="nav-link btn btn-link text-dark" asp-page="/Profile">@name</a>
         </li>
         <li class="nav-item">
-            
+         @if (volunteer != null)
+         {
             <span class=" nav-link btn btn-link text-dark">@numberOfCoins <img class="coin" src="~/images/Coin.png" /></span>
-            
+         }
         </li>
         <li class="nav-item">
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
